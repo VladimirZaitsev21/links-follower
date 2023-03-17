@@ -54,7 +54,7 @@ public class UrlParsersChainTest {
                     null
                 ),
                 Arguments.of(
-                    "htt://malformed.com",
+                    "htt://stackoverflow.com/questions/1642028/what-is-the-operator-in-c java",
                     null
                 ),
                 Arguments.of(

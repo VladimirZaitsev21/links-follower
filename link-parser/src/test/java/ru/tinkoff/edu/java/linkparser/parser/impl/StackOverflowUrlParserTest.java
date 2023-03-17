@@ -59,6 +59,6 @@ public class StackOverflowUrlParserTest {
 
     @Test
     public void parse_shouldReturnNullForMalformedUrl() {
-        assertNull(instance.parse("ht://stackoverflow.com/questions/1642028/what-is-the-operator-in-c"));
+        assertNull(instance.parse("http://stackoverflow.com/questions/1642028/what-is-the-operator-in-c java"));
     }
 }
