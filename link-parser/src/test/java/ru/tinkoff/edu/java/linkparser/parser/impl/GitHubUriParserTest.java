@@ -6,9 +6,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.tinkoff.edu.java.linkparser.model.UserAndRepo;
-import ru.tinkoff.edu.java.linkparser.model.answer.GitHubUrlParserAnswer;
-import ru.tinkoff.edu.java.linkparser.model.answer.StackOverflowUrlParserAnswer;
-import ru.tinkoff.edu.java.linkparser.parser.api.UrlParser;
+import ru.tinkoff.edu.java.linkparser.model.answer.GitHubUriParserAnswer;
+import ru.tinkoff.edu.java.linkparser.model.answer.StackOverflowUriParserAnswer;
+import ru.tinkoff.edu.java.linkparser.parser.api.UriParser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -16,21 +16,21 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class GitHubUrlParserTest {
+public class GitHubUriParserTest {
 
     @Mock
-    private UrlParser mock;
-    private GitHubUrlParser instance;
+    private UriParser mock;
+    private GitHubUriParser instance;
 
     @BeforeEach
     public void initInstance() {
-        instance = new GitHubUrlParser("github.com");
+        instance = new GitHubUriParser("github.com");
         instance.setNext(mock);
     }
 
     @Test
     public void parse_shouldReturnUserAndRepoForCorrectUrl() {
-        var expected = new GitHubUrlParserAnswer(new UserAndRepo("VladimirZaitsev21", "some-repo"));
+        var expected = new GitHubUriParserAnswer(new UserAndRepo("VladimirZaitsev21", "some-repo"));
         var actual = instance.parse("https://github.com/VladimirZaitsev21/some-repo");
         assertEquals(expected, actual);
         verifyNoInteractions(mock);
@@ -45,7 +45,7 @@ public class GitHubUrlParserTest {
 
     @Test
     public void parse_shouldSkipParsingForWrongAuthority() {
-        var expected = new StackOverflowUrlParserAnswer(1642028);
+        var expected = new StackOverflowUriParserAnswer(1642028);
         when(mock.parse(anyString())).thenReturn(expected);
         var actual = instance.parse("https://stackoverflow.com/questions/1642028/what-is-the-operator-in-c");
         assertEquals(expected, actual);

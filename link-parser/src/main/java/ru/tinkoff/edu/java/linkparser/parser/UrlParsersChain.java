@@ -1,20 +1,20 @@
 package ru.tinkoff.edu.java.linkparser.parser;
 
-import ru.tinkoff.edu.java.linkparser.model.answer.UrlParserAnswer;
-import ru.tinkoff.edu.java.linkparser.parser.api.UrlParser;
+import ru.tinkoff.edu.java.linkparser.model.answer.UriParserAnswer;
+import ru.tinkoff.edu.java.linkparser.parser.api.UriParser;
 
 public class UrlParsersChain {
 
-    private final UrlParser parserToStartFrom;
+    private final UriParser parserToStartFrom;
 
-    public UrlParsersChain(UrlParser... urlParsers) {
-        parserToStartFrom = urlParsers[0];
-        for (int i = 0; i < urlParsers.length - 1; i++) {
-            urlParsers[i].setNext(urlParsers[i + 1]);
+    public UrlParsersChain(UriParser... uriParsers) {
+        parserToStartFrom = uriParsers[0];
+        for (int i = 0; i < uriParsers.length - 1; i++) {
+            uriParsers[i].setNext(uriParsers[i + 1]);
         }
     }
 
-    public UrlParserAnswer doParse(String url) {
+    public UriParserAnswer doParse(String url) {
         return parserToStartFrom.parse(url);
     }
 }

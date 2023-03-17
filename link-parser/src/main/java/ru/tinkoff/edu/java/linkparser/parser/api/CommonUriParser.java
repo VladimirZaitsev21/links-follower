@@ -2,30 +2,30 @@ package ru.tinkoff.edu.java.linkparser.parser.api;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.tinkoff.edu.java.linkparser.model.answer.UrlParserAnswer;
+import ru.tinkoff.edu.java.linkparser.model.answer.UriParserAnswer;
 
 import java.net.URI;
 import java.util.regex.Pattern;
 
-public abstract class CommonUrlParser implements UrlParser {
+public abstract class CommonUriParser implements UriParser {
 
-    private static final Logger LOG = LogManager.getLogger(CommonUrlParser.class);
+    private static final Logger LOG = LogManager.getLogger(CommonUriParser.class);
     protected final String processedAuthority;
-    protected UrlParser nextParser;
+    protected UriParser nextParser;
     protected final Pattern pattern;
 
-    protected CommonUrlParser(String processedAuthority, Pattern pattern) {
+    protected CommonUriParser(String processedAuthority, Pattern pattern) {
         this.processedAuthority = processedAuthority;
         this.pattern = pattern;
     }
 
     @Override
-    public void setNext(UrlParser next) {
+    public void setNext(UriParser next) {
         this.nextParser = next;
     }
 
     @Override
-    public UrlParserAnswer parse(String uri) {
+    public UriParserAnswer parse(String uri) {
         if (uri == null) return null;
         var parsedUrl = parseToUri(uri);
         if (parsedUrl == null) return null;
@@ -34,7 +34,7 @@ public abstract class CommonUrlParser implements UrlParser {
         else return nextParser == null ? null : nextParser.parse(uri);
     }
 
-    protected abstract UrlParserAnswer extractPayloadFromUrl(URI parsedUrl);
+    protected abstract UriParserAnswer extractPayloadFromUrl(URI parsedUrl);
 
     protected URI parseToUri(String url) {
         try {
