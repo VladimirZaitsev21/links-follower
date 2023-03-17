@@ -60,6 +60,6 @@ public class GitHubUrlParserTest {
 
     @Test
     public void parse_shouldReturnNullForMalformedUrl() {
-        assertNull(instance.parse("ht://github.com/VladimirZaitsev21/some-repo"));
+        assertNull(instance.parse("http://github.com/VladimirZaitsev21/some-repo java"));
     }
 }

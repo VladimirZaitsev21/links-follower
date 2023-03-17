@@ -4,8 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.tinkoff.edu.java.linkparser.model.answer.UrlParserAnswer;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.util.regex.Pattern;
 
 public abstract class CommonUrlParser implements UrlParser {
@@ -26,24 +25,23 @@ public abstract class CommonUrlParser implements UrlParser {
     }
 
     @Override
-    public UrlParserAnswer parse(String url) {
-        if (url == null) return null;
-        var parsedUrl = parseToUrl(url);
+    public UrlParserAnswer parse(String uri) {
+        if (uri == null) return null;
+        var parsedUrl = parseToUri(uri);
         if (parsedUrl == null) return null;
         var urlAuthority = parsedUrl.getAuthority();
         if (processedAuthority.equals(urlAuthority)) return extractPayloadFromUrl(parsedUrl);
-        else return nextParser == null ? null : nextParser.parse(url);
+        else return nextParser == null ? null : nextParser.parse(uri);
     }
 
-    protected abstract UrlParserAnswer extractPayloadFromUrl(URL parsedUrl);
+    protected abstract UrlParserAnswer extractPayloadFromUrl(URI parsedUrl);
 
-    protected URL parseToUrl(String url) {
-        URL parsedUrl = null;
+    protected URI parseToUri(String url) {
         try {
-            parsedUrl = new URL(url);
-        } catch (MalformedURLException e) {
-            LOG.error("Received URL [{}] is malformed!", url, e);
+            return URI.create(url);
+        } catch (IllegalArgumentException e) {
+            LOG.error("Received URI [{}] is malformed!", url, e);
+            return null;
         }
-        return parsedUrl;
     }
 }

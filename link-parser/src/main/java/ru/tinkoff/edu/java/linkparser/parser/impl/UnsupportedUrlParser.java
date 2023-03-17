@@ -12,7 +12,7 @@ public final class UnsupportedUrlParser implements UrlParser {
     }
 
     @Override
-    public UrlParserAnswer parse(String url) {
-        return nextParser == null ? null : nextParser.parse(url);
+    public UrlParserAnswer parse(String uri) {
+        return nextParser == null ? null : nextParser.parse(uri);
     }
 }

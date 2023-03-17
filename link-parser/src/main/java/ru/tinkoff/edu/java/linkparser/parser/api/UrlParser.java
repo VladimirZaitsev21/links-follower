@@ -6,5 +6,5 @@ public interface UrlParser {
 
     void setNext(UrlParser next);
 
-    UrlParserAnswer parse(String url);
+    UrlParserAnswer parse(String uri);
 }
