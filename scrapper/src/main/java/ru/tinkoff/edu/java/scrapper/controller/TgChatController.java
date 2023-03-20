@@ -1,20 +1,24 @@
 package ru.tinkoff.edu.java.scrapper.controller;
 
 import org.springframework.web.bind.annotation.*;
-import ru.tinkoff.edu.java.scrapper.model.response.LinkResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/tg-chat")
 public class TgChatController {
 
+    private final List<Long> tgIds = new ArrayList<>();
+
     @PostMapping("/{id}")
-    public LinkResponse registerChat(@PathVariable long id) {
-        return null;
+    public void registerChat(@PathVariable long id) {
+        tgIds.add(id);
     }
 
     @DeleteMapping("/{id}")
-    public LinkResponse deleteChat(@PathVariable long id) {
-        return null;
+    public void deleteChat(@PathVariable long id) {
+        tgIds.remove(id);
     }
 
 }
