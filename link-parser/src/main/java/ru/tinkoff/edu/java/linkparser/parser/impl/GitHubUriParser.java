@@ -19,7 +19,7 @@ public final class GitHubUriParser extends CommonUriParser {
     }
 
     @Override
-    protected UriParserAnswer extractPayloadFromUrl(URI parsedUri) {
+    protected UriParserAnswer extractPayloadFromUri(URI parsedUri) {
         var matcher = pattern.matcher(parsedUri.getPath());
         if (matcher.find()) return new GitHubUriParserAnswer(
                 new UserAndRepo(matcher.group(USER_REGEXP_GROUP_NUMBER), matcher.group(REPO_REGEXP_GROUP_NUMBER))

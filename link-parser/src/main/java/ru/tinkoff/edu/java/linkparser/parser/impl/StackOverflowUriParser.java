@@ -17,7 +17,7 @@ public final class StackOverflowUriParser extends CommonUriParser {
     }
 
     @Override
-    protected UriParserAnswer extractPayloadFromUrl(URI parsedUri) {
+    protected UriParserAnswer extractPayloadFromUri(URI parsedUri) {
         var matcher = pattern.matcher(parsedUri.getPath());
         if (matcher.find()) return new StackOverflowUriParserAnswer(
                 Long.parseLong(matcher.group(QUESTION_ID_REGEXP_GROUP_NUMBER))
