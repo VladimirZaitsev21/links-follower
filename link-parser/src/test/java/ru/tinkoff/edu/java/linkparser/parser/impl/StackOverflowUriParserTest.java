@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.tinkoff.edu.java.linkparser.model.answer.NotMatchedUriParserAnswer;
 import ru.tinkoff.edu.java.linkparser.model.answer.StackOverflowUriParserAnswer;
 import ru.tinkoff.edu.java.linkparser.parser.api.UriParser;
 
@@ -38,7 +39,7 @@ public class StackOverflowUriParserTest {
     @Test
     public void parse_shouldReturnNullForIncorrectStackOverflowLink() {
         var actual = instance.parse("https://stackoverflow.com/questions");
-        assertNull(actual);
+        assertEquals(new NotMatchedUriParserAnswer(), actual);
         verifyNoInteractions(mock);
     }
 

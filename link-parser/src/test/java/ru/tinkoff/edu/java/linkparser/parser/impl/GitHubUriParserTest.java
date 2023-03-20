@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.tinkoff.edu.java.linkparser.model.UserAndRepo;
 import ru.tinkoff.edu.java.linkparser.model.answer.GitHubUriParserAnswer;
+import ru.tinkoff.edu.java.linkparser.model.answer.NotMatchedUriParserAnswer;
 import ru.tinkoff.edu.java.linkparser.model.answer.StackOverflowUriParserAnswer;
 import ru.tinkoff.edu.java.linkparser.parser.api.UriParser;
 
@@ -39,7 +40,7 @@ public class GitHubUriParserTest {
     @Test
     public void parse_shouldReturnNullForIncorrectGitHubLink() {
         var actual = instance.parse("https://github.com/VladimirZaitsev21");
-        assertNull(actual);
+        assertEquals(new NotMatchedUriParserAnswer(), actual);
         verifyNoInteractions(mock);
     }
 

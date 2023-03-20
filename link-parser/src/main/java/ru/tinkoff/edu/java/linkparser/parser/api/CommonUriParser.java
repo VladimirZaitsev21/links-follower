@@ -2,6 +2,7 @@ package ru.tinkoff.edu.java.linkparser.parser.api;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.tinkoff.edu.java.linkparser.model.answer.NotMatchedUriParserAnswer;
 import ru.tinkoff.edu.java.linkparser.model.answer.UriParserAnswer;
 
 import java.net.URI;
@@ -27,20 +28,24 @@ public abstract class CommonUriParser implements UriParser {
     @Override
     public UriParserAnswer parse(String uri) {
         if (uri == null) return null;
-        var parsedUrl = parseToUri(uri);
-        if (parsedUrl == null) return null;
-        var urlAuthority = parsedUrl.getAuthority();
-        if (processedAuthority.equals(urlAuthority)) return extractPayloadFromUrl(parsedUrl);
-        else return nextParser == null ? null : nextParser.parse(uri);
+        var parsedUri = parseToUri(uri);
+        if (parsedUri == null) return null;
+        var uriAuthority = parsedUri.getAuthority();
+        if (processedAuthority.equals(uriAuthority)) {
+            var uriParserAnswer = extractPayloadFromUri(parsedUri);
+            return uriParserAnswer == null ? new NotMatchedUriParserAnswer() : uriParserAnswer;
+        } else {
+            return nextParser == null ? new NotMatchedUriParserAnswer() : nextParser.parse(uri);
+        }
     }
 
-    protected abstract UriParserAnswer extractPayloadFromUrl(URI parsedUrl);
+    protected abstract UriParserAnswer extractPayloadFromUri(URI parsedUrl);
 
-    protected URI parseToUri(String url) {
+    protected URI parseToUri(String uri) {
         try {
-            return URI.create(url);
+            return URI.create(uri);
         } catch (IllegalArgumentException e) {
-            LOG.error("Received URI [{}] is malformed!", url, e);
+            LOG.error("Received URI [{}] is malformed!", uri, e);
             return null;
         }
     }

@@ -5,6 +5,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.tinkoff.edu.java.linkparser.model.UserAndRepo;
 import ru.tinkoff.edu.java.linkparser.model.answer.GitHubUriParserAnswer;
+import ru.tinkoff.edu.java.linkparser.model.answer.NotMatchedUriParserAnswer;
 import ru.tinkoff.edu.java.linkparser.model.answer.StackOverflowUriParserAnswer;
 import ru.tinkoff.edu.java.linkparser.model.answer.UriParserAnswer;
 import ru.tinkoff.edu.java.linkparser.parser.api.UriParser;
@@ -22,7 +23,7 @@ public class UriParsersChainTest {
     private final UriParser stackOverflowUriParser = new StackOverflowUriParser("stackoverflow.com");
     private final UriParser unsupportedUriParser = new UnsupportedUriParser();
 
-    private final UrlParsersChain parsersChain = new UrlParsersChain(gitHubUriParser, stackOverflowUriParser, unsupportedUriParser);
+    private final UriParsersChain parsersChain = new UriParsersChain(gitHubUriParser, stackOverflowUriParser, unsupportedUriParser);
 
     @ParameterizedTest
     @MethodSource("getArgumentsForDoParseTest")
@@ -43,11 +44,11 @@ public class UriParsersChainTest {
                 ),
                 Arguments.of(
                     "https://github.com/VladimirZaitsev21?tab=repositories",
-                    null
+                    new NotMatchedUriParserAnswer()
                 ),
                 Arguments.of(
                     "https://stackoverflow.com/questions",
-                    null
+                    new NotMatchedUriParserAnswer()
                 ),
                 Arguments.of(
                     "https://bitbucket.org/VladimirZaitsev21/some-repo",
