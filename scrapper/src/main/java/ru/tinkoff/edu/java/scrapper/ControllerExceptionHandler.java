@@ -18,7 +18,7 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiErrorResponse handleResourceNotFoundException(ResourceNotFoundException exception) {
         return new ApiErrorResponse(
-                exception.getDescription(),
+                "Requested resource not found",
                 String.valueOf(HttpStatus.NOT_FOUND.value()),
                 exception.getClass().getName(),
                 exception.getMessage(),
@@ -30,7 +30,7 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrorResponse handleIncorrectRequestParamsException(IncorrectRequestParamsException exception) {
         return new ApiErrorResponse(
-                exception.getDescription(),
+                "There are incorrect query parameters/body",
                 String.valueOf(HttpStatus.BAD_REQUEST.value()),
                 exception.getClass().getName(),
                 exception.getMessage(),
@@ -42,7 +42,7 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrorResponse handle(MissingServletRequestParameterException exception) {
         return new ApiErrorResponse(
-                "There are incorrect query parameters!",
+                "There are missing query parameters!",
                 String.valueOf(HttpStatus.BAD_REQUEST.value()),
                 exception.getClass().getName(),
                 exception.getMessage(),
