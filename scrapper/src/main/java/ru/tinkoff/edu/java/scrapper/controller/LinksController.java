@@ -41,14 +41,14 @@ public class LinksController {
     }
 
     @GetMapping
-    public ListLinksResponse getAllLinks(@RequestParam("Tg-Chat-Id") long tgChatId) {
+    public ListLinksResponse getAllLinks(@RequestHeader("Tg-Chat-Id") long tgChatId) {
         var listLinksResponse = links.get(tgChatId);
         if (listLinksResponse != null) return listLinksResponse;
         else throw new ResourceNotFoundException(String.format("No links are able for tg-chat-id=[%s]", tgChatId));
     }
 
     @PostMapping
-    public LinkResponse addLink(@RequestParam long tgChatId, @RequestBody AddLinkRequest request) {
+    public LinkResponse addLink(@RequestHeader("Tg-Chat-Id") long tgChatId, @RequestBody AddLinkRequest request) {
         var listLinksResponse = links.get(tgChatId);
         var newLinkResponse = new LinkResponse(random.nextLong(), request.link());
         if (listLinksResponse == null) {
@@ -65,7 +65,7 @@ public class LinksController {
     }
 
     @DeleteMapping
-    public LinkResponse deleteLink(@RequestParam long tgChatId, @RequestBody RemoveLinkRequest request) {
+    public LinkResponse deleteLink(@RequestHeader("Tg-Chat-Id") long tgChatId, @RequestBody RemoveLinkRequest request) {
         if (!links.containsKey(tgChatId)) {
             throw new IncorrectRequestParamsException(String.format("There is no such tg-chat-id=[%s]", tgChatId));
         }
