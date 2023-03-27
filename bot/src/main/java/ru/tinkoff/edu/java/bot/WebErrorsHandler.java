@@ -23,4 +23,16 @@ public class WebErrorsHandler {
                 Arrays.stream(exception.getStackTrace()).map(String::valueOf).toList()
         );
     }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiErrorResponse handleException(Exception exception) {
+        return new ApiErrorResponse(
+                "Something went wrong while your request",
+                String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),
+                Exception.class.getName(),
+                exception.getMessage(),
+                Arrays.stream(exception.getStackTrace()).map(String::valueOf).toList()
+        );
+    }
 }
