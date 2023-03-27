@@ -21,19 +21,19 @@ public class ControllerExceptionHandler {
         return handleInternal("Requested resource not found", exception);
     }
 
-    @ExceptionHandler({IncorrectRequestParamsException.class})
+    @ExceptionHandler(IncorrectRequestParamsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrorResponse handleIncorrectRequestParamsException(IncorrectRequestParamsException exception) {
         return handleInternal("There are incorrect query parameters/body", exception);
     }
 
-    @ExceptionHandler({MissingServletRequestParameterException.class})
+    @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrorResponse handleMissingServletRequestParameterException(MissingServletRequestParameterException exception) {
         return handleInternal("There are missing query parameters!", exception);
     }
 
-    @ExceptionHandler({MissingRequestHeaderException.class})
+    @ExceptionHandler(MissingRequestHeaderException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrorResponse handleMissingRequestHeaderException(MissingServletRequestParameterException exception) {
         return handleInternal("There are missing query parameters", exception);
