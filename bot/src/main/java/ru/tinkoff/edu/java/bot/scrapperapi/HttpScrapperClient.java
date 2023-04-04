@@ -39,7 +39,9 @@ public class HttpScrapperClient implements ScrapperClient {
 
     @Override
     public void registerChat(long chatId) {
-        webClient.post().uri(baseUrl + TG_CHAT_URL, chatId).retrieve()
+        webClient.post()
+                .uri(baseUrl, uriBuilder -> uriBuilder.path(TG_CHAT_URL).build(chatId))
+                .retrieve()
                 .onStatus(
                         HttpStatusCode::is4xxClientError,
                         resp -> onClientErrorInternal(resp, "registering new chat")
@@ -53,7 +55,9 @@ public class HttpScrapperClient implements ScrapperClient {
 
     @Override
     public void deleteChat(long chatId) {
-        webClient.delete().uri(baseUrl + TG_CHAT_URL, chatId).retrieve()
+        webClient.delete()
+                .uri(baseUrl, uriBuilder -> uriBuilder.path(TG_CHAT_URL).build(chatId))
+                .retrieve()
                 .onStatus(
                         HttpStatusCode::is4xxClientError,
                         resp -> onClientErrorInternal(resp, "deleting chat")
@@ -69,7 +73,8 @@ public class HttpScrapperClient implements ScrapperClient {
     public AllLinksApiResponse getAllLinks(long tgChatId) {
         return webClient
                 .get()
-                .uri(baseUrl + LINKS_URL).header(TG_CHAT_ID_HEADER, String.valueOf(tgChatId))
+                .uri(baseUrl, uriBuilder -> uriBuilder.path(LINKS_URL).build())
+                .header(TG_CHAT_ID_HEADER, String.valueOf(tgChatId))
                 .retrieve()
                 .onStatus(
                         HttpStatusCode::is4xxClientError,
@@ -86,7 +91,8 @@ public class HttpScrapperClient implements ScrapperClient {
     public LinkResponse addLink(long tgChatId, String link) {
         return webClient
                 .post()
-                .uri(baseUrl + LINKS_URL).header(TG_CHAT_ID_HEADER, String.valueOf(tgChatId))
+                .uri(baseUrl, uriBuilder -> uriBuilder.path(LINKS_URL).build())
+                .header(TG_CHAT_ID_HEADER, String.valueOf(tgChatId))
                 .bodyValue(new AddLinkRequest(link))
                 .retrieve()
                 .onStatus(
@@ -104,7 +110,8 @@ public class HttpScrapperClient implements ScrapperClient {
     public LinkResponse deleteLink(long tgChatId, String link) {
         return webClient
                 .method(DELETE)
-                .uri(baseUrl + LINKS_URL).header(TG_CHAT_ID_HEADER, String.valueOf(tgChatId))
+                .uri(baseUrl, uriBuilder -> uriBuilder.path(LINKS_URL).build())
+                .header(TG_CHAT_ID_HEADER, String.valueOf(tgChatId))
                 .body(Mono.just(new RemoveLinkRequest(link)), RemoveLinkRequest.class)
                 .retrieve()
                 .onStatus(
