@@ -3,3 +3,4 @@
 /scrapper/target/
 /link-parser/target/
 /common/target/
+/migrations/pg-data/
