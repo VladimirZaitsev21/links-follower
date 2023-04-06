@@ -10,9 +10,8 @@ CREATE TABLE IF NOT EXISTS app.chats
 
 CREATE TABLE IF NOT EXISTS app.links
 (
-    id bigint NOT NULL,
+    id serial primary key,
     link varchar(200) NOT NULL,
-    CONSTRAINT links_pkey PRIMARY KEY (id),
     CONSTRAINT unique_link UNIQUE (link)
 );
 
