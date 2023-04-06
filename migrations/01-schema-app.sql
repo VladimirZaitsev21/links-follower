@@ -22,10 +22,10 @@ CREATE TABLE IF NOT EXISTS app.trackings
     CONSTRAINT "trackings_PK" PRIMARY KEY (tg_chat_id, link_id),
     CONSTRAINT "chat_FK" FOREIGN KEY (tg_chat_id)
         REFERENCES app.chats (tg_chat_id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
     CONSTRAINT "link_FK" FOREIGN KEY (tg_chat_id)
         REFERENCES app.links (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
