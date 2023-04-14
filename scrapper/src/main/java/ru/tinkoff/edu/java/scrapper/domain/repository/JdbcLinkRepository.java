@@ -26,6 +26,7 @@ public class JdbcLinkRepository {
     public static final String SELECT_TRACKING_BY_LINK_KEY = "app.links.selectTrackingByLink";
     public static final String DELETE_TRACKING_KEY = "app.links.deleteTracking";
     public static final String UPDATE_KEY = "app.links.update";
+    public static final String SELECT_BY_UPDATED_AT_KEY = "app.links.selectByUpdatedAt";
     private final JdbcTemplate jdbcTemplate;
     private final LinkMapper linkMapper;
     private final QueriesSource queriesSource;
@@ -46,11 +47,15 @@ public class JdbcLinkRepository {
 
     public Map<Link, List<Long>> findOld(long expiration, long currentTime) {
         var timeBorder = Timestamp.from(Instant.ofEpochMilli(currentTime - expiration));
-        var entries = jdbcTemplate.query(
-                "SELECT id, link, updated_at, tg_chat_id from app.links JOIN app.trackings ON links.id = trackings.link_id" +
-                        " WHERE updated_at < ?",
-                (rs, rowNum) -> Map.entry(linkMapper.mapRow(rs, rowNum), rs.getLong(4)), timeBorder
+        List<Map.Entry<Link, Long>> entries = jdbcTemplate.query(
+                queriesSource.getQuery(SELECT_BY_UPDATED_AT_KEY),
+                (rs, rowNum) -> Map.entry(linkMapper.mapRow(rs, rowNum), rs.getLong(4)),
+                timeBorder
         );
+        return createMapFromEntries(entries);
+    }
+
+    private Map<Link, List<Long>> createMapFromEntries(List<Map.Entry<Link, Long>> entries) {
         var result = new HashMap<Link, List<Long>>();
         for (var entry : entries) {
             var list = result.get(entry.getKey());
