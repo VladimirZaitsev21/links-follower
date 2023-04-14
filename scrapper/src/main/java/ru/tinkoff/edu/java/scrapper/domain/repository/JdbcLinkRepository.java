@@ -79,12 +79,12 @@ public class JdbcLinkRepository {
         }
     }
 
-    public Link save(String link, Timestamp updatedAt) {
+    public Link save(String link, Timestamp updatedAt, Map<String, Object> updateInfo) {
         var linksFound = jdbcTemplate.query(queriesSource.getQuery(SELECT_BY_LINK_KEY), linkMapper, link);
         if (!linksFound.isEmpty()) {
             var currentLink = linksFound.get(0);
             if (currentLink.updatedAt() == null) {
-                currentLink = new Link(currentLink.id(), currentLink.link(), updatedAt);
+                currentLink = new Link(currentLink.id(), currentLink.link(), updatedAt, updateInfo);
                 jdbcTemplate.update(queriesSource.getQuery(UPDATE_KEY), updatedAt, currentLink.id());
             }
             return currentLink;

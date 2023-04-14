@@ -53,7 +53,7 @@ public class JdbcLinkUpdater implements LinkUpdater {
                         "There is an update for this link",
                         linksToUpdate.get(link)
                 );
-                linkRepository.save(link.link().toString(), Timestamp.from(Instant.ofEpochMilli(updateTime)));
+                linkRepository.save(link.link().toString(), Timestamp.from(Instant.ofEpochMilli(updateTime)), null);
             }
         }
     }
