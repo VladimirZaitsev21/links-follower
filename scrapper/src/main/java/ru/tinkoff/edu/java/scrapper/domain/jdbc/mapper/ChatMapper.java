@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.domain.mapper;
+package ru.tinkoff.edu.java.scrapper.domain.jdbc.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
