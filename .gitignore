@@ -5,3 +5,8 @@
 /common/target/
 /migrations/pg-data/
 /scrapper-jooq/target/
+/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/tables/
+/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/App.java
+/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/DefaultCatalog.java
+/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/Keys.java
+/scrapper/src/main/java/ru/tinkoff/edu/java/scrapper/domain/jooq/Tables.java
