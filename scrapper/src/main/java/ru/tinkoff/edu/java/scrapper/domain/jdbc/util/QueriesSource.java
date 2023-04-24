@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.domain.util;
+package ru.tinkoff.edu.java.scrapper.domain.jdbc.util;
 
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;

@@ -1,41 +1,50 @@
-package ru.tinkoff.edu.java.scrapper.domain.repository;
+package ru.tinkoff.edu.java.scrapper.domain.jooq.repository;
 
+import org.jooq.DSLContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.IntegrationEnvironment;
-import ru.tinkoff.edu.java.scrapper.domain.repository.testconfig.JdbcTestConfiguration;
-import ru.tinkoff.edu.java.scrapper.domain.mapper.ChatMapper;
 import ru.tinkoff.edu.java.scrapper.domain.model.Chat;
-import ru.tinkoff.edu.java.scrapper.domain.util.QueriesSource;
 
 import javax.sql.DataSource;
-
 import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Import({JdbcChatRepositoryTest.JdbcTemplateTestConfiguration.class, JdbcTestConfiguration.class})
-@ActiveProfiles("test")
-public class JdbcChatRepositoryTest extends IntegrationEnvironment {
+@Import({JooqChatRepositoryTest.JooqTestConfiguration.class})
+public class JooqChatRepositoryTest extends IntegrationEnvironment {
 
     @TestConfiguration
-    @Profile("test")
-    public static class JdbcTemplateTestConfiguration {
+    public static class JooqTestConfiguration {
 
         @Bean
+        @Primary
+        public JdbcTemplate pgJdbcTemplate(DataSource dataSource) {
+            return new JdbcTemplate(dataSource);
+        }
+
+        @Bean
+        @Primary
+        public TransactionManager transactionManager(DataSource dataSource) {
+            return new DataSourceTransactionManager(dataSource);
+        }
+
+        @Bean
+        @Primary
         public DataSource pgDataSource() {
             var dataSource = new DriverManagerDataSource();
             dataSource.setDriverClassName(POSTGRESQL_CONTAINER.getDriverClassName());
@@ -46,19 +55,16 @@ public class JdbcChatRepositoryTest extends IntegrationEnvironment {
         }
 
         @Bean
-        public ChatMapper chatMapper() {
-            return new ChatMapper();
-        }
-
-        @Bean
-        public JdbcChatRepository pgJdbcChatRepository(JdbcTemplate jdbcTemplate, ChatMapper chatMapper, QueriesSource queriesSource) {
-            return new JdbcChatRepository(jdbcTemplate, chatMapper, queriesSource);
+        @Primary
+        public JooqChatRepository pgJooqChatRepository(DSLContext dslContext) {
+            return new JooqChatRepository(dslContext);
         }
     }
 
     private final Random random = new Random();
+
     @Autowired
-    private JdbcChatRepository instance;
+    private JooqChatRepository instance;
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -82,7 +88,7 @@ public class JdbcChatRepositoryTest extends IntegrationEnvironment {
     @Rollback
     public void remove_shouldDeleteCorrectRow() {
         var chat = new Chat(random.nextLong(), "Vladimir");
-        jdbcTemplate.update(
+        var deletedRows = jdbcTemplate.update(
                 "INSERT INTO app.chats(tg_chat_id, nickname) VALUES (?, ?)",
                 chat.tgChatId(), chat.nickname()
         );
@@ -91,7 +97,8 @@ public class JdbcChatRepositoryTest extends IntegrationEnvironment {
         var chatById = getChatFromDB(chat);
         assertAll(
                 () -> assertTrue(removeResult),
-                () -> assertNull(chatById)
+                () -> assertNull(chatById),
+                () -> assertEquals(1, deletedRows)
         );
     }
 
@@ -156,4 +163,5 @@ public class JdbcChatRepositoryTest extends IntegrationEnvironment {
             return null;
         }
     }
+
 }

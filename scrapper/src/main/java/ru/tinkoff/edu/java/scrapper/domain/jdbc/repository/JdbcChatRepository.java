@@ -1,12 +1,12 @@
-package ru.tinkoff.edu.java.scrapper.domain.repository;
+package ru.tinkoff.edu.java.scrapper.domain.jdbc.repository;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.tinkoff.edu.java.scrapper.domain.mapper.ChatMapper;
 import ru.tinkoff.edu.java.scrapper.domain.model.Chat;
-import ru.tinkoff.edu.java.scrapper.domain.util.QueriesSource;
+import ru.tinkoff.edu.java.scrapper.domain.jdbc.mapper.ChatMapper;
+import ru.tinkoff.edu.java.scrapper.domain.jdbc.util.QueriesSource;
 import ru.tinkoff.edu.java.scrapper.exception.DatabaseException;
 
 import java.util.List;

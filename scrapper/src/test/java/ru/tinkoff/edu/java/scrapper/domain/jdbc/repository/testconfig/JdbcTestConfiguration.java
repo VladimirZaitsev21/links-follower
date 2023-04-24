@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.domain.repository.testconfig;
+package ru.tinkoff.edu.java.scrapper.domain.jdbc.repository.testconfig;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -7,26 +7,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.TransactionManager;
-import ru.tinkoff.edu.java.scrapper.domain.util.QueriesSource;
-
-import javax.sql.DataSource;
+import ru.tinkoff.edu.java.scrapper.domain.jdbc.util.QueriesSource;
 
 @TestConfiguration
 @Profile("test")
 public class JdbcTestConfiguration {
-
-    @Bean
-    public JdbcTemplate pgJdbcTemplate(DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
-    }
-
-    @Bean
-    public TransactionManager transactionManager(DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
-    }
 
     @Bean(name = "queriesMessageSource")
     @Primary
