@@ -39,11 +39,11 @@ public class ControllerExceptionHandler {
         return handleInternal("There are missing query parameters", exception, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiErrorResponse handleException(Exception exception) {
-        return handleInternal("Something went wrong while your request", exception, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public ApiErrorResponse handleException(Exception exception) {
+//        return handleInternal("Something went wrong while your request", exception, HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
     private ApiErrorResponse handleInternal(String message, Exception exception, HttpStatus httpStatus) {
         return new ApiErrorResponse(

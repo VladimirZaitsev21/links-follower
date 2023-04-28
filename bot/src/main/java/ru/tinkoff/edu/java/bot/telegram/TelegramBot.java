@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.tinkoff.edu.java.bot.model.LinkUpdateType;
+import ru.tinkoff.edu.java.common.model.LinkUpdateType;
 import ru.tinkoff.edu.java.bot.telegram.handler.LinkUpdateHandler;
 import ru.tinkoff.edu.java.bot.telegram.handler.TelegramUpdateHandler;
 

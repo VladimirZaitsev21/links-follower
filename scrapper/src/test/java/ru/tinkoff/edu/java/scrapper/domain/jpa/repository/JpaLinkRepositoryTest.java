@@ -38,6 +38,7 @@ public class JpaLinkRepositoryTest extends IntegrationEnvironment {
     @DynamicPropertySource
     public static void props(DynamicPropertyRegistry registry) {
         registry.add("app.access-type", () -> "jpa");
+        registry.add("app.use-queue", () -> "false");
     }
     @TestConfiguration
     public static class JpaTestConfiguration {

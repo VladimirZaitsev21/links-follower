@@ -40,6 +40,7 @@ public class JooqLinkRepositoryTest extends IntegrationEnvironment {
     @DynamicPropertySource
     public static void props(DynamicPropertyRegistry registry) {
         registry.add("app.access-type", () -> "jooq");
+        registry.add("app.use-queue", () -> "false");
     }
 
     @TestConfiguration

@@ -10,7 +10,7 @@ services:
     ports: 
       - "5432:5432"
     volumes:
-      - ./migrations/pg-data:/var/lib/postgresql/data/
+      - ./pg-data:/var/lib/postgresql/data/
     healthcheck:
       test: /usr/bin/pg_isready
       interval: 5s
@@ -34,6 +34,22 @@ services:
       - update
     volumes:
       - ./migrations:/liquibase/changelog
+    networks:
+      - backend
+
+  rabbit:
+    image: rabbitmq:3-management
+    hostname: links-follower-mq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=rmuser
+      - RABBITMQ_DEFAULT_PASS=rmpassword
+      - RABBITMQ_DEFAULT_VHOST=links-follower-mq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - ./rabbitmq:/var/lib/rabbitmq
     networks:
       - backend
 networks:

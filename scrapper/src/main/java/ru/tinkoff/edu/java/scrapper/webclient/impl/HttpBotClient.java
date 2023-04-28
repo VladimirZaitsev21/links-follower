@@ -1,9 +1,9 @@
 package ru.tinkoff.edu.java.scrapper.webclient.impl;
 
 import org.springframework.web.reactive.function.client.WebClient;
-import ru.tinkoff.edu.java.scrapper.model.request.LinkUpdateType;
+import ru.tinkoff.edu.java.common.model.LinkUpdate;
+import ru.tinkoff.edu.java.common.model.LinkUpdateType;
 import ru.tinkoff.edu.java.scrapper.webclient.api.BotClient;
-import ru.tinkoff.edu.java.scrapper.webclient.model.LinkUpdate;
 
 import java.net.URI;
 import java.util.List;

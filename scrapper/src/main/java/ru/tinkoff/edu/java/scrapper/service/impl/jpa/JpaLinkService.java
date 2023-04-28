@@ -9,8 +9,13 @@ import ru.tinkoff.edu.java.scrapper.service.api.LinkService;
 import ru.tinkoff.edu.java.scrapper.service.model.Link;
 
 import java.net.URI;
+import java.sql.Timestamp;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Set;
+
+import static java.util.Collections.emptyMap;
 
 @Transactional
 public class JpaLinkService implements LinkService {
@@ -28,15 +33,22 @@ public class JpaLinkService implements LinkService {
         var chat = chatRepository.findById(tgChatId)
                 .orElseThrow(() -> new DatabaseException(String.format("No chat is present with tgChatId=[%d]", tgChatId)));
         var link = linkRepository.findByLink(url.toString());
+        JpaLink jpaLink;
 
         if (link.isPresent()) {
+            jpaLink = link.get();
             link.get().getTrackingJpaChats().add(chat);
             linkRepository.save(link.get());
         } else {
-            var newLink = JpaLink.builder().link(url.toString()).trackingJpaChats(Set.of(chat)).build();
-            linkRepository.save(newLink);
+            jpaLink = JpaLink.builder()
+                    .link(url.toString())
+                    .trackingJpaChats(Set.of(chat))
+                    .updatedAt(new Timestamp(System.currentTimeMillis()))
+                    .updateInfo(emptyMap())
+                    .build();
+            linkRepository.save(jpaLink);
         }
-        return null;
+        return convert(jpaLink);
     }
 
     @Override
@@ -44,12 +56,20 @@ public class JpaLinkService implements LinkService {
         var foundLink = linkRepository.findByLink(url.toString()).get();
         foundLink.getTrackingJpaChats().removeIf(c -> c.getTgChatId() == tgChatId);
         linkRepository.save(foundLink);
-        return null;
+        return convert(foundLink);
     }
 
     @Override
     public List<Link> getTrackingLinks(long tgChatId) {
-        linkRepository.findByTrackingJpaChatsTgChatId(tgChatId);
-        return null;
+        return linkRepository.findByTrackingJpaChatsTgChatId(tgChatId).stream().map(this::convert).toList();
+    }
+
+    private Link convert(JpaLink source) {
+        return new Link(
+                source.getId(),
+                URI.create(source.getLink()),
+                OffsetDateTime.ofInstant(source.getUpdatedAt().toInstant(), ZoneId.systemDefault()),
+                source.getUpdateInfo()
+        );
     }
 }
