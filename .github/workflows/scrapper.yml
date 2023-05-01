@@ -2,9 +2,9 @@ name: build scrapper module
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "hw8" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "hw8" ]
 
 jobs:
   build:
@@ -20,10 +20,4 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn clean test -pl scrapper -am
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: surefire-reports
-        path: scrapper/target/surefire-reports/**
+      run: mvn package -pl scrapper -am
