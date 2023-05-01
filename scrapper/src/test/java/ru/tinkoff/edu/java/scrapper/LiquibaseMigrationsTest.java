@@ -32,5 +32,7 @@ public class LiquibaseMigrationsTest extends IntegrationEnvironment {
                 () -> assertEquals(1L, rs.getLong(1)),
                 () -> assertEquals("Vladimir", rs.getString(2))
         );
+        statement = connection.createStatement();
+        statement.executeUpdate("DELETE FROM app.chats");
     }
 }
