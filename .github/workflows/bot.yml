@@ -2,9 +2,11 @@ name: build bot module
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "hw**" ]
+    paths: [ "pom.xml", "bot/**", "common/**"]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "hw**" ]
+    paths: [ "pom.xml", "bot/**", "common/**"]
 
 jobs:
   build:
