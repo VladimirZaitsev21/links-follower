@@ -1,6 +1,7 @@
 name: build bot module
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "master", "hw**" ]
     paths: [ "pom.xml", "bot/**", "common/**"]
