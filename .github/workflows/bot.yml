@@ -1,10 +1,10 @@
 name: build bot module
 
 on:
-  workflow_dispatch:
+  workflow_dispatch
   push:
     branches: [ "master", "hw**" ]
-    paths: [ "pom.xml", "bot/**", "common/**"]
+    paths: [ "pom.xml", "bot/**", "common/**", ".github/workflows/bot.yml"]
   pull_request:
     branches: [ "master", "hw**" ]
     paths: [ "pom.xml", "bot/**", "common/**"]
