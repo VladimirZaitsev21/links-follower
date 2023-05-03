@@ -9,6 +9,9 @@ on:
     branches: [ "master", "hw**" ]
     paths: [ "pom.xml", "scrapper/**", "common/**", "link-parser/**"]
 
+env:
+  REGISTRY: ghcr.io
+
 jobs:
   build:
 
@@ -24,3 +27,13 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn package -pl scrapper -am
+    - name: Log in to the Container registry
+      uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build Docker image
+      run: docker build -t ${{ env.REGISTRY }}/scrapper:latest -f scrapper/scrapper.Dockerfile .
+    - name: Push Docker image to GitHub Packages
+      run: docker push ${{ env.REGISTRY }}/scrapper:latest
