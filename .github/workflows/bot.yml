@@ -3,10 +3,8 @@ name: build bot module
 on:
   workflow_dispatch:
   push:
-    branches: [ "master", "hw**" ]
     paths: [ "pom.xml", "bot/**", "common/**", ".github/workflows/bot.yml"]
   pull_request:
-    branches: [ "master", "hw**" ]
     paths: [ "pom.xml", "bot/**", "common/**"]
 
 jobs:
@@ -24,3 +22,13 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn package -pl bot -am
+    - name: Log in to the Container registry
+      uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build Docker image
+      run: docker build -t ${{ env.REGISTRY }}/vladimirzaitsev21/bot:latest -f bot/bot.Dockerfile .
+    - name: Push Docker image to GitHub Packages
+      run: docker push ${{ env.REGISTRY }}/vladimirzaitsev21/bot:latest
