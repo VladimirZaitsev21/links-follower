@@ -39,11 +39,7 @@ jobs:
         registry: ${{ env.REGISTRY }}
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-    - name: See directory
-      run: ls -la
-    - name: See scrapper
-      run: ls -la scrapper
     - name: Build Docker image
-      run: docker build -t ${{ env.REGISTRY }}/scrapper:latest -f scrapper/scrapper.Dockerfile .
+      run: docker build -t ${{ env.REGISTRY }}/vladimirzaitsev21/scrapper:latest -f scrapper/scrapper.Dockerfile .
     - name: Push Docker image to GitHub Packages
-      run: docker push ${{ env.REGISTRY }}/scrapper:latest
+      run: docker push ${{ env.REGISTRY }}/vladimirzaitsev21/scrapper:latest
