@@ -23,10 +23,6 @@ jobs:
         java-version: '17.0.6'
         distribution: 'temurin'
         cache: maven
-    - name: See actor
-      run: echo ${{ github.actor }}
-    - name: See token
-      run: echo ${{ secrets.GITHUB_TOKEN }}
     - name: Build with Maven
       run: mvn package -pl scrapper -am
     - name: Log in to the Container registry
