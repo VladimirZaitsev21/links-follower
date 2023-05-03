@@ -3,10 +3,8 @@ name: build scrapper module
 on:
   workflow_dispatch:
   push:
-    branches: [ "master", "hw**" ]
     paths: [ "pom.xml", "scrapper/**", "common/**", "link-parser/**", ".github/workflows/scrapper.yml"]
   pull_request:
-    branches: [ "master", "hw**" ]
     paths: [ "pom.xml", "scrapper/**", "common/**", "link-parser/**"]
 
 env:
