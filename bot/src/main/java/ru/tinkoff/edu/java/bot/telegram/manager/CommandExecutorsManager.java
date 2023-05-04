@@ -1,13 +1,12 @@
 package ru.tinkoff.edu.java.bot.telegram.manager;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.telegram.executor.api.MessageCommandExecutor;
 import ru.tinkoff.edu.java.bot.telegram.model.BotState;
 import ru.tinkoff.edu.java.bot.telegram.model.Command;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Component
 public class CommandExecutorsManager {

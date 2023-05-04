@@ -3,9 +3,9 @@ name: build bot module
 on:
   workflow_dispatch:
   push:
-    paths: [ "pom.xml", "bot/**", "common/**", ".github/workflows/bot.yml"]
+    paths: [ "pom.xml", "checkstyle.xml", "bot/**", "common/**", ".github/workflows/bot.yml"]
   pull_request:
-    paths: [ "pom.xml", "bot/**", "common/**"]
+    paths: [ "pom.xml", "checkstyle.xml", "bot/**", "common/**"]
 
 env:
   REGISTRY: ghcr.io
@@ -35,3 +35,17 @@ jobs:
       run: docker build -t ${{ env.REGISTRY }}/vladimirzaitsev21/bot:latest -f bot/bot.Dockerfile .
     - name: Push Docker image to GitHub Packages
       run: docker push ${{ env.REGISTRY }}/vladimirzaitsev21/bot:latest
+
+  checkstyle:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17.0.6'
+          distribution: 'temurin'
+          cache: maven
+      - name: Run checkstyle with Maven
+        run: mvn -pl bot -am checkstyle:check -Dcheckstyle.config.location=checkstyle.xml

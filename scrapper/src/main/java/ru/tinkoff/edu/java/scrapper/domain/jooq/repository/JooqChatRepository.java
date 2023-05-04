@@ -1,10 +1,8 @@
 package ru.tinkoff.edu.java.scrapper.domain.jooq.repository;
 
+import java.util.List;
 import org.jooq.DSLContext;
 import ru.tinkoff.edu.java.scrapper.domain.model.TableChat;
-
-import java.util.List;
-
 import static ru.tinkoff.edu.java.scrapper.domain.jooq.Tables.CHATS;
 
 public class JooqChatRepository {
@@ -26,8 +24,10 @@ public class JooqChatRepository {
                 .selectFrom(CHATS)
                 .where(CHATS.TG_CHAT_ID.eq(tgChatId))
                 .fetchOne();
-        return chatsRecord == null ?
-                null : chatsRecord.map(record -> new TableChat(record.get(CHATS.TG_CHAT_ID), record.get(CHATS.NICKNAME)));
+        return chatsRecord == null
+            ? null : chatsRecord.map(
+                recordToMap -> new TableChat(recordToMap.get(CHATS.TG_CHAT_ID), recordToMap.get(CHATS.NICKNAME))
+        );
     }
 
     public boolean add(TableChat chat) {

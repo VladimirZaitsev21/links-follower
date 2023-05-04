@@ -1,5 +1,7 @@
 package ru.tinkoff.edu.java.scrapperjooq;
 
+import java.io.File;
+import java.sql.DriverManager;
 import liquibase.Contexts;
 import liquibase.LabelExpression;
 import liquibase.Liquibase;
@@ -8,10 +10,10 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.DirectoryResourceAccessor;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-import java.io.File;
-import java.sql.DriverManager;
-
 public class PostgreSqlEnvironment {
+
+    protected PostgreSqlEnvironment() {
+    }
 
     protected static final PostgreSQLContainer<?> POSTGRESQL_CONTAINER;
 
@@ -26,7 +28,8 @@ public class PostgreSqlEnvironment {
                     POSTGRESQL_CONTAINER.getPassword()
             );
 
-            var database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
+            var database = DatabaseFactory.getInstance()
+                .findCorrectDatabaseImplementation(new JdbcConnection(connection));
 
             var migrations = new File(".").toPath().toAbsolutePath()
                     .getParent().resolve("migrations");
@@ -35,7 +38,7 @@ public class PostgreSqlEnvironment {
             liquibase.update(new Contexts(), new LabelExpression());
             connection.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }

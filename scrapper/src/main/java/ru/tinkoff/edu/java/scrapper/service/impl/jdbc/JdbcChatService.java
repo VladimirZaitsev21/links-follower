@@ -17,14 +17,19 @@ public class JdbcChatService implements ChatService {
     @Override
     public void register(long tgChatId, String username) {
         var isRegistered = chatRepository.add(new TableChat(tgChatId, username));
-        if (!isRegistered)
-            throw new IllegalArgumentException(String.format("Trying to add existing %s", new TableChat(tgChatId, username)));
+        if (!isRegistered) {
+            throw new IllegalArgumentException(String.format(
+                "Trying to add existing %s",
+                new TableChat(tgChatId, username)
+            ));
+        }
     }
 
     @Override
     public void unregister(long tgChatId) {
         var isRemoved = chatRepository.remove(tgChatId);
-        if (!isRemoved)
+        if (!isRemoved) {
             throw new IllegalArgumentException(String.format("Trying to remove non-existing tgChatId=%d", tgChatId));
+        }
     }
 }

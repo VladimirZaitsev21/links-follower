@@ -1,13 +1,12 @@
 package ru.tinkoff.edu.java.scrapper.domain.jdbc.repository;
 
+import java.util.List;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.mapper.ChatMapper;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.util.QueriesSource;
 import ru.tinkoff.edu.java.scrapper.domain.model.TableChat;
 import ru.tinkoff.edu.java.scrapper.exception.DatabaseException;
-
-import java.util.List;
 
 public class JdbcChatRepository {
 
@@ -49,7 +48,9 @@ public class JdbcChatRepository {
         try {
             return jdbcTemplate.update(queriesSource.getQuery(DELETE_KEY), tgChatId) != 0;
         } catch (Exception e) {
-            throw new DatabaseException(String.format("Something went wrong while deleting tgChatId=%d to DB", tgChatId));
+            throw new DatabaseException(
+                String.format("Something went wrong while deleting tgChatId=%d to DB", tgChatId)
+            );
         }
     }
 }

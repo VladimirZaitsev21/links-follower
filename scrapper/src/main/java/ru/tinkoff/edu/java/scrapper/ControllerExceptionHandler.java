@@ -1,5 +1,6 @@
 package ru.tinkoff.edu.java.scrapper;
 
+import java.util.Arrays;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -9,8 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.tinkoff.edu.java.common.exception.IncorrectRequestParamsException;
 import ru.tinkoff.edu.java.common.model.ApiErrorResponse;
 import ru.tinkoff.edu.java.scrapper.exception.ResourceNotFoundException;
-
-import java.util.Arrays;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {
@@ -29,7 +28,9 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiErrorResponse handleMissingServletRequestParameterException(MissingServletRequestParameterException exception) {
+    public ApiErrorResponse handleMissingServletRequestParameterException(
+        MissingServletRequestParameterException exception
+    ) {
         return handleInternal("There are missing query parameters!", exception, HttpStatus.BAD_REQUEST);
     }
 
@@ -39,11 +40,11 @@ public class ControllerExceptionHandler {
         return handleInternal("There are missing query parameters", exception, HttpStatus.BAD_REQUEST);
     }
 
-//    @ExceptionHandler(Exception.class)
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    public ApiErrorResponse handleException(Exception exception) {
-//        return handleInternal("Something went wrong while your request", exception, HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiErrorResponse handleException(Exception exception) {
+        return handleInternal("Something went wrong while your request", exception, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     private ApiErrorResponse handleInternal(String message, Exception exception, HttpStatus httpStatus) {
         return new ApiErrorResponse(

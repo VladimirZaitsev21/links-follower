@@ -1,5 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.configuration;
 
+import javax.sql.DataSource;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,8 +14,6 @@ import ru.tinkoff.edu.java.linkparser.parser.UriParsersChain;
 import ru.tinkoff.edu.java.linkparser.parser.impl.GitHubUriParser;
 import ru.tinkoff.edu.java.linkparser.parser.impl.StackOverflowUriParser;
 import ru.tinkoff.edu.java.linkparser.parser.impl.UnsupportedUriParser;
-
-import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement

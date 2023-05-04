@@ -1,12 +1,11 @@
 package ru.tinkoff.edu.java.scrapper.webclient.impl;
 
+import java.net.URI;
+import java.util.List;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.tinkoff.edu.java.common.model.LinkUpdate;
 import ru.tinkoff.edu.java.common.model.LinkUpdateType;
 import ru.tinkoff.edu.java.scrapper.webclient.api.BotClient;
-
-import java.net.URI;
-import java.util.List;
 
 public class HttpBotClient implements BotClient {
 

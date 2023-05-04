@@ -6,3 +6,8 @@
 /scrapper-jooq/target/
 /pg-data/
 /rabbitmq/
+/target/
+/scrapper/scrapper.iml
+/scrapper-jooq/scrapper-jooq.iml
+/bot/bot.iml
+/link-parser/link-parser.iml

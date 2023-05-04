@@ -3,6 +3,7 @@ package ru.tinkoff.edu.java.scrapper.configuration;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
+import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +16,6 @@ import ru.tinkoff.edu.java.scrapper.webclient.api.StackOverflowClient;
 import ru.tinkoff.edu.java.scrapper.webclient.impl.HttpBotClient;
 import ru.tinkoff.edu.java.scrapper.webclient.impl.HttpGitHubClient;
 import ru.tinkoff.edu.java.scrapper.webclient.impl.HttpStackOverflowClient;
-
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class ClientConfiguration {
@@ -42,7 +41,10 @@ public class ClientConfiguration {
     }
 
     @Bean
-    public StackOverflowClient stackOverflowClient(@Value("${web.url.base.stackoverflow}") String baseUrl, WebClient webClient) {
+    public StackOverflowClient stackOverflowClient(
+        @Value("${web.url.base.stackoverflow}") String baseUrl,
+        WebClient webClient
+    ) {
         return new HttpStackOverflowClient(baseUrl, webClient);
     }
 
