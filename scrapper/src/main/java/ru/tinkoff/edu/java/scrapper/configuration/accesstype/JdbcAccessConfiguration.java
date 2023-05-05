@@ -13,10 +13,10 @@ import ru.tinkoff.edu.java.scrapper.domain.jdbc.repository.JdbcChatRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.repository.JdbcLinkRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jdbc.util.QueriesSource;
 import ru.tinkoff.edu.java.scrapper.domain.util.MappingUtils;
+import ru.tinkoff.edu.java.scrapper.service.api.BotNotifier;
 import ru.tinkoff.edu.java.scrapper.service.impl.jdbc.JdbcChatService;
 import ru.tinkoff.edu.java.scrapper.service.impl.jdbc.JdbcLinkService;
 import ru.tinkoff.edu.java.scrapper.service.impl.jdbc.JdbcLinkUpdater;
-import ru.tinkoff.edu.java.scrapper.webclient.api.BotClient;
 import ru.tinkoff.edu.java.scrapper.webclient.api.GitHubClient;
 import ru.tinkoff.edu.java.scrapper.webclient.api.StackOverflowClient;
 
@@ -60,9 +60,9 @@ public class JdbcAccessConfiguration {
             JdbcLinkRepository linkRepository,
             GitHubClient gitHubClient,
             StackOverflowClient stackOverflowClient,
-            BotClient botClient,
+            BotNotifier botNotifier,
             UriParsersChain uriParsersChain
     ) {
-        return new JdbcLinkUpdater(linkRepository, gitHubClient, stackOverflowClient, botClient, uriParsersChain);
+        return new JdbcLinkUpdater(linkRepository, gitHubClient, stackOverflowClient, botNotifier, uriParsersChain);
     }
 }

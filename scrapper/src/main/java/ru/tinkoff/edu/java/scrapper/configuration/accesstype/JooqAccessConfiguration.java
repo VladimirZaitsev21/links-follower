@@ -10,10 +10,10 @@ import ru.tinkoff.edu.java.scrapper.domain.jooq.mapper.LinkFieldsMapper;
 import ru.tinkoff.edu.java.scrapper.domain.jooq.repository.JooqChatRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jooq.repository.JooqLinkRepository;
 import ru.tinkoff.edu.java.scrapper.domain.util.MappingUtils;
+import ru.tinkoff.edu.java.scrapper.service.api.BotNotifier;
 import ru.tinkoff.edu.java.scrapper.service.impl.jooq.JooqChatService;
 import ru.tinkoff.edu.java.scrapper.service.impl.jooq.JooqLinkService;
 import ru.tinkoff.edu.java.scrapper.service.impl.jooq.JooqLinkUpdater;
-import ru.tinkoff.edu.java.scrapper.webclient.api.BotClient;
 import ru.tinkoff.edu.java.scrapper.webclient.api.GitHubClient;
 import ru.tinkoff.edu.java.scrapper.webclient.api.StackOverflowClient;
 
@@ -51,9 +51,9 @@ public class JooqAccessConfiguration {
             JooqLinkRepository linkRepository,
             GitHubClient gitHubClient,
             StackOverflowClient stackOverflowClient,
-            BotClient botClient,
+            BotNotifier botNotifier,
             UriParsersChain uriParsersChain
     ) {
-        return new JooqLinkUpdater(linkRepository, gitHubClient, stackOverflowClient, botClient, uriParsersChain);
+        return new JooqLinkUpdater(linkRepository, gitHubClient, stackOverflowClient, botNotifier, uriParsersChain);
     }
 }

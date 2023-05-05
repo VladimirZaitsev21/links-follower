@@ -8,9 +8,9 @@ import ru.tinkoff.edu.java.linkparser.model.answer.StackOverflowUriParserAnswer;
 import ru.tinkoff.edu.java.linkparser.parser.UriParsersChain;
 import ru.tinkoff.edu.java.scrapper.domain.jooq.repository.JooqLinkRepository;
 import ru.tinkoff.edu.java.scrapper.domain.model.TableLink;
+import ru.tinkoff.edu.java.scrapper.service.api.BotNotifier;
 import ru.tinkoff.edu.java.scrapper.service.api.LinkUpdater;
 import ru.tinkoff.edu.java.scrapper.service.model.Link;
-import ru.tinkoff.edu.java.scrapper.webclient.api.BotClient;
 import ru.tinkoff.edu.java.scrapper.webclient.api.GitHubClient;
 import ru.tinkoff.edu.java.scrapper.webclient.api.StackOverflowClient;
 
@@ -21,7 +21,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
-import static ru.tinkoff.edu.java.scrapper.model.request.LinkUpdateType.*;
+import static ru.tinkoff.edu.java.common.model.LinkUpdateType.*;
 
 @Transactional
 @RequiredArgsConstructor
@@ -30,7 +30,7 @@ public class JooqLinkUpdater implements LinkUpdater {
     private final JooqLinkRepository linkRepository;
     private final GitHubClient gitHubClient;
     private final StackOverflowClient stackOverflowClient;
-    private final BotClient botClient;
+    private final BotNotifier botNotifier;
     private final UriParsersChain uriParsersChain;
 
     @Override
@@ -56,10 +56,10 @@ public class JooqLinkUpdater implements LinkUpdater {
         link.updateInfo().put("open_issues_count", gitHubResponse.openIssuesCount());
 
         if (openIssuesCount != null && gitHubResponse.openIssuesCount() != (int) openIssuesCount) {
-            botClient.sendUpdate(link.id(), link.link(), GITHUB_ISSUES, tgChatIds);
+            botNotifier.notify(link.id(), link.link(), GITHUB_ISSUES, tgChatIds);
             updateTime = System.currentTimeMillis();
         } else if (updateTime > link.updatedAt().toInstant().toEpochMilli()) {
-            botClient.sendUpdate(link.id(), link.link(), COMMON, tgChatIds);
+            botNotifier.notify(link.id(), link.link(), COMMON, tgChatIds);
         }
         linkRepository.save(link.link().toString(), Timestamp.from(Instant.ofEpochMilli(updateTime)), link.updateInfo());
     }
@@ -71,10 +71,10 @@ public class JooqLinkUpdater implements LinkUpdater {
         link.updateInfo().put("answer_count", stackOverflowResponse.answerCount());
 
         if (answerCount != null && stackOverflowResponse.answerCount() != (int) answerCount) {
-            botClient.sendUpdate(link.id(), link.link(), STACKOVERFLOW_ANSWERS, tgChatIds);
+            botNotifier.notify(link.id(), link.link(), STACKOVERFLOW_ANSWERS, tgChatIds);
             updateTime = System.currentTimeMillis();
         } else if (updateTime > link.updatedAt().toInstant().toEpochMilli()) {
-            botClient.sendUpdate(link.id(), link.link(), COMMON, tgChatIds);
+            botNotifier.notify(link.id(), link.link(), COMMON, tgChatIds);
         }
         linkRepository.save(link.link().toString(), Timestamp.from(Instant.ofEpochMilli(updateTime)), link.updateInfo());
     }

@@ -9,8 +9,8 @@ import ru.tinkoff.edu.java.linkparser.parser.UriParsersChain;
 import ru.tinkoff.edu.java.scrapper.domain.jpa.repository.JpaLinkRepository;
 import ru.tinkoff.edu.java.scrapper.domain.model.jpa.JpaChat;
 import ru.tinkoff.edu.java.scrapper.domain.model.jpa.JpaLink;
+import ru.tinkoff.edu.java.scrapper.service.api.BotNotifier;
 import ru.tinkoff.edu.java.scrapper.service.api.LinkUpdater;
-import ru.tinkoff.edu.java.scrapper.webclient.api.BotClient;
 import ru.tinkoff.edu.java.scrapper.webclient.api.GitHubClient;
 import ru.tinkoff.edu.java.scrapper.webclient.api.StackOverflowClient;
 
@@ -18,7 +18,7 @@ import java.net.URI;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-import static ru.tinkoff.edu.java.scrapper.model.request.LinkUpdateType.*;
+import static ru.tinkoff.edu.java.common.model.LinkUpdateType.*;
 
 @Transactional
 @RequiredArgsConstructor
@@ -27,7 +27,7 @@ public class JpaLinkUpdater implements LinkUpdater {
     private final JpaLinkRepository linkRepository;
     private final GitHubClient gitHubClient;
     private final StackOverflowClient stackOverflowClient;
-    private final BotClient botClient;
+    private final BotNotifier botNotifier;
     private final UriParsersChain uriParsersChain;
 
     @Override
@@ -53,14 +53,16 @@ public class JpaLinkUpdater implements LinkUpdater {
         link.getUpdateInfo().put("open_issues_count", gitHubResponse.openIssuesCount());
 
         if (openIssuesCount != null && gitHubResponse.openIssuesCount() != (int) openIssuesCount) {
-            botClient.sendUpdate(
+            updateTime = System.currentTimeMillis();
+            botNotifier.notify(
                     link.getId(),
                     URI.create(link.getLink()),
                     GITHUB_ISSUES,
                     link.getTrackingJpaChats().stream().map(JpaChat::getTgChatId).toList()
             );
         } else if (updateTime > link.getUpdatedAt().toInstant().toEpochMilli()) {
-            botClient.sendUpdate(
+            updateTime = System.currentTimeMillis();
+            botNotifier.notify(
                     link.getId(),
                     URI.create(link.getLink()),
                     COMMON,
@@ -68,7 +70,7 @@ public class JpaLinkUpdater implements LinkUpdater {
             );
         }
         link.setUpdatedAt(Timestamp.from(Instant.ofEpochMilli(updateTime)));
-        linkRepository.save(link);
+        linkRepository.saveAndFlush(link);
     }
 
     private void updateStackOverflowLink(JpaLink link, StackOverflowUriParserAnswer stackOverflowAnswer) {
@@ -78,14 +80,14 @@ public class JpaLinkUpdater implements LinkUpdater {
         link.getUpdateInfo().put("answer_count", stackOverflowResponse.answerCount());
 
         if (answerCount != null && stackOverflowResponse.answerCount() != (int) answerCount) {
-            botClient.sendUpdate(
+            botNotifier.notify(
                     link.getId(),
                     URI.create(link.getLink()),
                     STACKOVERFLOW_ANSWERS,
                     link.getTrackingJpaChats().stream().map(JpaChat::getTgChatId).toList()
             );
         } else if (updateTime > link.getUpdatedAt().toInstant().toEpochMilli()) {
-            botClient.sendUpdate(
+            botNotifier.notify(
                     link.getId(),
                     URI.create(link.getLink()),
                     COMMON,

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import ru.tinkoff.edu.java.linkparser.parser.UriParsersChain;
 import ru.tinkoff.edu.java.scrapper.domain.jpa.repository.JpaChatRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jpa.repository.JpaLinkRepository;
+import ru.tinkoff.edu.java.scrapper.service.api.BotNotifier;
 import ru.tinkoff.edu.java.scrapper.service.impl.jpa.JpaChatService;
 import ru.tinkoff.edu.java.scrapper.service.impl.jpa.JpaLinkService;
 import ru.tinkoff.edu.java.scrapper.service.impl.jpa.JpaLinkUpdater;
@@ -32,9 +33,9 @@ public class JpaAccessConfiguration {
             JpaLinkRepository jpaLinkRepository,
             GitHubClient gitHubClient,
             StackOverflowClient stackOverflowClient,
-            BotClient botClient,
+            BotNotifier botNotifier,
             UriParsersChain uriParsersChain
     ) {
-        return new JpaLinkUpdater(jpaLinkRepository, gitHubClient, stackOverflowClient, botClient, uriParsersChain);
+        return new JpaLinkUpdater(jpaLinkRepository, gitHubClient, stackOverflowClient, botNotifier, uriParsersChain);
     }
 }

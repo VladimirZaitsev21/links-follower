@@ -26,8 +26,52 @@ public class PropertiesConfig {
         return config.db().user();
     }
 
+    @Bean boolean useQueue(ApplicationConfig config) {
+        return config.useQueue();
+    }
+
     @Bean
     public String password(ApplicationConfig config) {
         return config.db().password();
+    }
+
+    @Bean
+    public String rabbitQueue(ApplicationConfig config) {
+        return config.rabbit().queue();
+    }
+
+    @Bean
+    public String rabbitExchange(ApplicationConfig config) {
+        return config.rabbit().exchange();
+    }
+
+    @Bean
+    public String rabbitUser(ApplicationConfig config) {
+        return config.rabbit().user();
+    }
+
+    @Bean
+    public String rabbitPassword(ApplicationConfig config) {
+        return config.rabbit().password();
+    }
+
+    @Bean
+    public String rabbitHost(ApplicationConfig config) {
+        return config.rabbit().host();
+    }
+
+    @Bean
+    public int rabbitPort(ApplicationConfig config) {
+        return config.rabbit().port();
+    }
+
+    @Bean
+    public String rabbitVirtualHost(ApplicationConfig config) {
+        return config.rabbit().virtualHost();
+    }
+
+    @Bean
+    public String rabbitRoutingKey(ApplicationConfig config) {
+        return config.rabbit().routingKey();
     }
 }

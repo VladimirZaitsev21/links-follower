@@ -2,7 +2,7 @@ package ru.tinkoff.edu.java.bot.telegram.handler;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import ru.tinkoff.edu.java.bot.model.LinkUpdateType;
+import ru.tinkoff.edu.java.common.model.LinkUpdateType;
 import ru.tinkoff.edu.java.bot.telegram.util.LocaleMessageRepo;
 
 @Component
