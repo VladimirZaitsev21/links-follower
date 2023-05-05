@@ -1,5 +1,11 @@
 package ru.tinkoff.edu.java.scrapper.service.impl.jpa;
 
+import java.net.URI;
+import java.sql.Timestamp;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.Set;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.domain.jpa.repository.JpaChatRepository;
 import ru.tinkoff.edu.java.scrapper.domain.jpa.repository.JpaLinkRepository;
@@ -7,15 +13,6 @@ import ru.tinkoff.edu.java.scrapper.domain.model.jpa.JpaLink;
 import ru.tinkoff.edu.java.scrapper.exception.DatabaseException;
 import ru.tinkoff.edu.java.scrapper.service.api.LinkService;
 import ru.tinkoff.edu.java.scrapper.service.model.Link;
-
-import java.net.URI;
-
-import java.sql.Timestamp;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.util.List;
-import java.util.Set;
-
 import static java.util.Collections.emptyMap;
 
 @Transactional
