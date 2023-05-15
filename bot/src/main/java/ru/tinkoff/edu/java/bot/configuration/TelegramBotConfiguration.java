@@ -1,6 +1,7 @@
 package ru.tinkoff.edu.java.bot.configuration;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -61,9 +62,10 @@ public class TelegramBotConfiguration {
             List<BotCommand> botCommands,
             TelegramBotsApi api,
             TelegramUserMessageUpdateHandler handler,
-            LinkUpdateHandler linkUpdateHandler
+            LinkUpdateHandler linkUpdateHandler,
+            @Value("${spring.application.name}") String applicationName
     ) throws TelegramApiException {
-        var bot = new TelegramBot(botUsername, botToken, botCommands, handler, linkUpdateHandler);
+        var bot = new TelegramBot(botUsername, botToken, botCommands, handler, linkUpdateHandler, applicationName);
         api.registerBot(bot);
         bot.initBot();
         return bot;
