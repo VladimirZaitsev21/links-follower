@@ -1,6 +1,11 @@
 package ru.tinkoff.edu.java.bot.configuration;
 
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -12,6 +17,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfiguration {
+
+    public static final String DLQ_POSTFIX = ".dlq";
 
     @Bean
     public ConnectionFactory connectionFactory(
@@ -27,17 +34,18 @@ public class RabbitMQConfiguration {
         connectionFactory.setVirtualHost(rabbitVirtualHost);
         return connectionFactory;
     }
+
     @Bean
     public Queue queue(String rabbitQueue, String rabbitRoutingKey, String rabbitExchange) {
         return QueueBuilder.durable(rabbitQueue)
                 .withArgument("x-dead-letter-exchange", rabbitExchange)
-                .withArgument("x-dead-letter-routing-key", rabbitRoutingKey + ".dlq")
+                .withArgument("x-dead-letter-routing-key", rabbitRoutingKey + DLQ_POSTFIX)
                 .build();
     }
 
     @Bean
     public Queue deadLetterQueue(String rabbitQueue) {
-        return QueueBuilder.durable(rabbitQueue + ".dlq").build();
+        return QueueBuilder.durable(rabbitQueue + DLQ_POSTFIX).build();
     }
 
     @Bean
@@ -52,7 +60,7 @@ public class RabbitMQConfiguration {
 
     @Bean
     public Binding deadBinding(Queue deadLetterQueue, DirectExchange directExchange, String rabbitRoutingKey) {
-        return BindingBuilder.bind(deadLetterQueue).to(directExchange).with(rabbitRoutingKey + ".dlq");
+        return BindingBuilder.bind(deadLetterQueue).to(directExchange).with(rabbitRoutingKey + DLQ_POSTFIX);
     }
 
     @Bean
@@ -64,6 +72,7 @@ public class RabbitMQConfiguration {
     public AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory) {
         return new RabbitAdmin(connectionFactory);
     }
+
     @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter("*");

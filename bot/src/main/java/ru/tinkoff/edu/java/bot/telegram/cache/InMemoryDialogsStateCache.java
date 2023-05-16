@@ -1,10 +1,9 @@
 package ru.tinkoff.edu.java.bot.telegram.cache;
 
-import org.springframework.stereotype.Component;
-import ru.tinkoff.edu.java.bot.telegram.model.BotState;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.stereotype.Component;
+import ru.tinkoff.edu.java.bot.telegram.model.BotState;
 
 @Component
 public class InMemoryDialogsStateCache implements DialogsStateCache {
@@ -14,7 +13,9 @@ public class InMemoryDialogsStateCache implements DialogsStateCache {
     @Override
     public BotState getStateById(long tgChatId) {
         var botState = chatsStates.get(tgChatId);
-        if (botState == null) botState = BotState.MAIN_MENU;
+        if (botState == null) {
+            botState = BotState.MAIN_MENU;
+        }
         return botState;
     }
 

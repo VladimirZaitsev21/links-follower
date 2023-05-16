@@ -1,9 +1,8 @@
 package ru.tinkoff.edu.java.scrapper.service.api;
 
-import ru.tinkoff.edu.java.scrapper.service.model.Link;
-
 import java.net.URI;
 import java.util.List;
+import ru.tinkoff.edu.java.scrapper.service.model.Link;
 
 public interface LinkService {
 

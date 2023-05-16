@@ -1,5 +1,11 @@
 package ru.tinkoff.edu.java.scrapper.service.impl.jooq;
 
+import java.net.URI;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.linkparser.model.answer.GitHubUriParserAnswer;
@@ -13,20 +19,16 @@ import ru.tinkoff.edu.java.scrapper.service.api.LinkUpdater;
 import ru.tinkoff.edu.java.scrapper.service.model.Link;
 import ru.tinkoff.edu.java.scrapper.webclient.api.GitHubClient;
 import ru.tinkoff.edu.java.scrapper.webclient.api.StackOverflowClient;
-
-import java.net.URI;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.util.List;
-
-import static ru.tinkoff.edu.java.common.model.LinkUpdateType.*;
+import static ru.tinkoff.edu.java.common.model.LinkUpdateType.COMMON;
+import static ru.tinkoff.edu.java.common.model.LinkUpdateType.GITHUB_ISSUES;
+import static ru.tinkoff.edu.java.common.model.LinkUpdateType.STACKOVERFLOW_ANSWERS;
 
 @Transactional
 @RequiredArgsConstructor
 public class JooqLinkUpdater implements LinkUpdater {
 
+    public static final String OPEN_ISSUES_COUNT = "open_issues_count";
+    public static final String ANSWER_COUNT = "answer_count";
     private final JooqLinkRepository linkRepository;
     private final GitHubClient gitHubClient;
     private final StackOverflowClient stackOverflowClient;
@@ -37,14 +39,17 @@ public class JooqLinkUpdater implements LinkUpdater {
     public void update(long expiration) {
         var linksWithTgChatIds = linkRepository.findOld(expiration, System.currentTimeMillis());
         var links = linksWithTgChatIds.keySet();
-        for (var link : links) updateLink(convert(link), linksWithTgChatIds.get(link));
+        for (var link : links) {
+            updateLink(convert(link), linksWithTgChatIds.get(link));
+        }
     }
 
     private void updateLink(Link link, List<Long> tgChatIds) {
         var uriParserAnswer = uriParsersChain.doParse(link.link().toString());
         switch (uriParserAnswer) {
             case GitHubUriParserAnswer gitHubAnswer -> updateGitHubLink(link, tgChatIds, gitHubAnswer);
-            case StackOverflowUriParserAnswer stackOverflowAnswer -> updateStackOverflowLink(link, tgChatIds, stackOverflowAnswer);
+            case StackOverflowUriParserAnswer stackOverflowAnswer
+                -> updateStackOverflowLink(link, tgChatIds, stackOverflowAnswer);
             case NotMatchedUriParserAnswer ignored -> { }
         }
     }
@@ -52,8 +57,8 @@ public class JooqLinkUpdater implements LinkUpdater {
     private void updateGitHubLink(Link link, List<Long> tgChatIds, GitHubUriParserAnswer gitHubAnswer) {
         var gitHubResponse = gitHubClient.fetchRepo(gitHubAnswer.userAndRepo());
         var updateTime = gitHubResponse.pushedAt().toInstant().toEpochMilli();
-        var openIssuesCount = link.updateInfo().get("open_issues_count"); //сценарий проверки issues
-        link.updateInfo().put("open_issues_count", gitHubResponse.openIssuesCount());
+        var openIssuesCount = link.updateInfo().get(OPEN_ISSUES_COUNT); //сценарий проверки issues
+        link.updateInfo().put(OPEN_ISSUES_COUNT, gitHubResponse.openIssuesCount());
 
         if (openIssuesCount != null && gitHubResponse.openIssuesCount() != (int) openIssuesCount) {
             botNotifier.notify(link.id(), link.link(), GITHUB_ISSUES, tgChatIds);
@@ -61,14 +66,19 @@ public class JooqLinkUpdater implements LinkUpdater {
         } else if (updateTime > link.updatedAt().toInstant().toEpochMilli()) {
             botNotifier.notify(link.id(), link.link(), COMMON, tgChatIds);
         }
-        linkRepository.save(link.link().toString(), Timestamp.from(Instant.ofEpochMilli(updateTime)), link.updateInfo());
+        linkRepository
+            .save(link.link().toString(), Timestamp.from(Instant.ofEpochMilli(updateTime)), link.updateInfo());
     }
 
-    private void updateStackOverflowLink(Link link, List<Long> tgChatIds, StackOverflowUriParserAnswer stackOverflowAnswer) {
+    private void updateStackOverflowLink(
+        Link link,
+        List<Long> tgChatIds,
+        StackOverflowUriParserAnswer stackOverflowAnswer
+    ) {
         var stackOverflowResponse = stackOverflowClient.fetchQuestion(stackOverflowAnswer.id());
         var updateTime = stackOverflowResponse.lastActivityDate().toInstant().toEpochMilli();
-        var answerCount = link.updateInfo().get("answer_count"); //сценарий проверки количества ответов
-        link.updateInfo().put("answer_count", stackOverflowResponse.answerCount());
+        var answerCount = link.updateInfo().get(ANSWER_COUNT); //сценарий проверки количества ответов
+        link.updateInfo().put(ANSWER_COUNT, stackOverflowResponse.answerCount());
 
         if (answerCount != null && stackOverflowResponse.answerCount() != (int) answerCount) {
             botNotifier.notify(link.id(), link.link(), STACKOVERFLOW_ANSWERS, tgChatIds);
@@ -76,7 +86,8 @@ public class JooqLinkUpdater implements LinkUpdater {
         } else if (updateTime > link.updatedAt().toInstant().toEpochMilli()) {
             botNotifier.notify(link.id(), link.link(), COMMON, tgChatIds);
         }
-        linkRepository.save(link.link().toString(), Timestamp.from(Instant.ofEpochMilli(updateTime)), link.updateInfo());
+        linkRepository
+            .save(link.link().toString(), Timestamp.from(Instant.ofEpochMilli(updateTime)), link.updateInfo());
     }
 
     private Link convert(TableLink source) {

@@ -1,5 +1,6 @@
 package ru.tinkoff.edu.java.bot.configuration;
 
+import java.util.List;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,8 +12,6 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.tinkoff.edu.java.bot.telegram.TelegramBot;
 import ru.tinkoff.edu.java.bot.telegram.handler.LinkUpdateHandler;
 import ru.tinkoff.edu.java.bot.telegram.handler.TelegramUserMessageUpdateHandler;
-
-import java.util.List;
 
 @Configuration
 public class TelegramBotConfiguration {

@@ -29,7 +29,9 @@ public class JpaLinkService implements LinkService {
     @Override
     public Link add(long tgChatId, URI url) {
         var chat = chatRepository.findById(tgChatId)
-                .orElseThrow(() -> new DatabaseException(String.format("No chat is present with tgChatId=[%d]", tgChatId)));
+                .orElseThrow(
+                    () -> new DatabaseException(String.format("No chat is present with tgChatId=[%d]", tgChatId))
+                );
         var link = linkRepository.findByLink(url.toString());
         JpaLink jpaLink;
 

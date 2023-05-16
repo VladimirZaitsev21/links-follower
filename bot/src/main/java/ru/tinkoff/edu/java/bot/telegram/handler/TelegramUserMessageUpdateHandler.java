@@ -7,15 +7,24 @@ import ru.tinkoff.edu.java.bot.telegram.cache.DialogsStateCache;
 import ru.tinkoff.edu.java.bot.telegram.manager.CommandExecutorsManager;
 import ru.tinkoff.edu.java.bot.telegram.model.BotState;
 import ru.tinkoff.edu.java.bot.telegram.model.Command;
-
-import static ru.tinkoff.edu.java.bot.telegram.model.BotState.*;
+import static ru.tinkoff.edu.java.bot.telegram.model.BotState.HELP;
+import static ru.tinkoff.edu.java.bot.telegram.model.BotState.INCORRECT;
+import static ru.tinkoff.edu.java.bot.telegram.model.BotState.LIST;
+import static ru.tinkoff.edu.java.bot.telegram.model.BotState.NEW_LINK;
+import static ru.tinkoff.edu.java.bot.telegram.model.BotState.REMOVING_LINK;
+import static ru.tinkoff.edu.java.bot.telegram.model.BotState.START;
+import static ru.tinkoff.edu.java.bot.telegram.model.BotState.TRACK;
+import static ru.tinkoff.edu.java.bot.telegram.model.BotState.UNTRACK;
 
 @Component
 public class TelegramUserMessageUpdateHandler implements TelegramUpdateHandler<SendMessage> {
     private final CommandExecutorsManager commandExecutorsManager;
     private final DialogsStateCache dialogsStateCache;
 
-    public TelegramUserMessageUpdateHandler(CommandExecutorsManager commandExecutorsManager, DialogsStateCache dialogsStateCache) {
+    public TelegramUserMessageUpdateHandler(
+        CommandExecutorsManager commandExecutorsManager,
+        DialogsStateCache dialogsStateCache
+    ) {
         this.commandExecutorsManager = commandExecutorsManager;
         this.dialogsStateCache = dialogsStateCache;
     }

@@ -1,5 +1,6 @@
 package ru.tinkoff.edu.java.bot.telegram;
 
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -9,11 +10,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.tinkoff.edu.java.common.model.LinkUpdateType;
 import ru.tinkoff.edu.java.bot.telegram.handler.LinkUpdateHandler;
 import ru.tinkoff.edu.java.bot.telegram.handler.TelegramUpdateHandler;
-
-import java.util.List;
+import ru.tinkoff.edu.java.common.model.LinkUpdateType;
 
 public class TelegramBot extends TelegramLongPollingBot {
 

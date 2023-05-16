@@ -1,5 +1,8 @@
 package ru.tinkoff.edu.java.scrapper.service.impl.jpa;
 
+import java.net.URI;
+import java.sql.Timestamp;
+import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.linkparser.model.answer.GitHubUriParserAnswer;
@@ -13,17 +16,16 @@ import ru.tinkoff.edu.java.scrapper.service.api.BotNotifier;
 import ru.tinkoff.edu.java.scrapper.service.api.LinkUpdater;
 import ru.tinkoff.edu.java.scrapper.webclient.api.GitHubClient;
 import ru.tinkoff.edu.java.scrapper.webclient.api.StackOverflowClient;
-
-import java.net.URI;
-import java.sql.Timestamp;
-import java.time.Instant;
-
-import static ru.tinkoff.edu.java.common.model.LinkUpdateType.*;
+import static ru.tinkoff.edu.java.common.model.LinkUpdateType.COMMON;
+import static ru.tinkoff.edu.java.common.model.LinkUpdateType.GITHUB_ISSUES;
+import static ru.tinkoff.edu.java.common.model.LinkUpdateType.STACKOVERFLOW_ANSWERS;
 
 @Transactional
 @RequiredArgsConstructor
 public class JpaLinkUpdater implements LinkUpdater {
 
+    public static final String OPEN_ISSUES_COUNT = "open_issues_count";
+    public static final String ANSWER_COUNT = "answer_count";
     private final JpaLinkRepository linkRepository;
     private final GitHubClient gitHubClient;
     private final StackOverflowClient stackOverflowClient;
@@ -49,8 +51,8 @@ public class JpaLinkUpdater implements LinkUpdater {
     private void updateGitHubLink(JpaLink link, GitHubUriParserAnswer gitHubAnswer) {
         var gitHubResponse = gitHubClient.fetchRepo(gitHubAnswer.userAndRepo());
         var updateTime = gitHubResponse.pushedAt().toInstant().toEpochMilli();
-        var openIssuesCount = link.getUpdateInfo().get("open_issues_count");
-        link.getUpdateInfo().put("open_issues_count", gitHubResponse.openIssuesCount());
+        var openIssuesCount = link.getUpdateInfo().get(OPEN_ISSUES_COUNT);
+        link.getUpdateInfo().put(OPEN_ISSUES_COUNT, gitHubResponse.openIssuesCount());
 
         if (openIssuesCount != null && gitHubResponse.openIssuesCount() != (int) openIssuesCount) {
             updateTime = System.currentTimeMillis();
@@ -76,8 +78,8 @@ public class JpaLinkUpdater implements LinkUpdater {
     private void updateStackOverflowLink(JpaLink link, StackOverflowUriParserAnswer stackOverflowAnswer) {
         var stackOverflowResponse = stackOverflowClient.fetchQuestion(stackOverflowAnswer.id());
         var updateTime = stackOverflowResponse.lastActivityDate().toInstant().toEpochMilli();
-        var answerCount = link.getUpdateInfo().get("answer_count");
-        link.getUpdateInfo().put("answer_count", stackOverflowResponse.answerCount());
+        var answerCount = link.getUpdateInfo().get(ANSWER_COUNT);
+        link.getUpdateInfo().put(ANSWER_COUNT, stackOverflowResponse.answerCount());
 
         if (answerCount != null && stackOverflowResponse.answerCount() != (int) answerCount) {
             botNotifier.notify(

@@ -2,19 +2,17 @@ package ru.tinkoff.edu.java.scrapper.domain.jooq.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jooq.DSLContext;
-import org.jooq.JSONB;
-import ru.tinkoff.edu.java.scrapper.domain.jooq.mapper.LinkFieldsMapper;
-import ru.tinkoff.edu.java.scrapper.domain.model.TableLink;
-import ru.tinkoff.edu.java.scrapper.domain.util.MappingUtils;
-
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
-
+import org.jooq.DSLContext;
+import org.jooq.JSONB;
+import ru.tinkoff.edu.java.scrapper.domain.jooq.mapper.LinkFieldsMapper;
+import ru.tinkoff.edu.java.scrapper.domain.model.TableLink;
+import ru.tinkoff.edu.java.scrapper.domain.util.MappingUtils;
 import static ru.tinkoff.edu.java.scrapper.domain.jooq.Tables.LINKS;
 import static ru.tinkoff.edu.java.scrapper.domain.jooq.Tables.TRACKINGS;
 
@@ -25,7 +23,12 @@ public class JooqLinkRepository {
     private final ObjectMapper objectMapper;
     private final LinkFieldsMapper linkFieldsMapper;
 
-    public JooqLinkRepository(DSLContext dslContext, MappingUtils mappingUtils, ObjectMapper objectMapper, LinkFieldsMapper linkFieldsMapper) {
+    public JooqLinkRepository(
+        DSLContext dslContext,
+        MappingUtils mappingUtils,
+        ObjectMapper objectMapper,
+        LinkFieldsMapper linkFieldsMapper
+    ) {
         this.dslContext = dslContext;
         this.mappingUtils = mappingUtils;
         this.objectMapper = objectMapper;
@@ -34,7 +37,8 @@ public class JooqLinkRepository {
 
     public List<TableLink> findAll() {
         return dslContext
-                .select(LINKS.ID, LINKS.LINK, LINKS.UPDATED_AT, LINKS.UPDATE_INFO).from(LINKS).fetch().map(linkFieldsMapper);
+            .select(LINKS.ID, LINKS.LINK, LINKS.UPDATED_AT, LINKS.UPDATE_INFO)
+            .from(LINKS).fetch().map(linkFieldsMapper);
     }
 
     public List<TableLink> findAll(long tgChatId) {
@@ -52,9 +56,11 @@ public class JooqLinkRepository {
                 .from(LINKS).join(TRACKINGS).on(TRACKINGS.LINK_ID.eq(LINKS.ID.coerce(TRACKINGS.LINK_ID)))
                 .where(LINKS.UPDATED_AT.le(LocalDateTime.ofInstant(timeBorder, ZoneId.systemDefault())))
                 .fetch().map(
-                        record -> Map.entry(
-                                linkFieldsMapper.map(record.into(LINKS.ID, LINKS.LINK, LINKS.UPDATED_AT, LINKS.UPDATE_INFO)),
-                                record.component5()
+                        recordToMap -> Map.entry(
+                                linkFieldsMapper.map(
+                                    recordToMap.into(LINKS.ID, LINKS.LINK, LINKS.UPDATED_AT, LINKS.UPDATE_INFO)
+                                ),
+                                recordToMap.component5()
                         )
                 );
         return mappingUtils.createMapFromEntries(entries);
@@ -72,10 +78,16 @@ public class JooqLinkRepository {
             return storedLink;
         } else {
             var newLink = dslContext.insertInto(LINKS).columns(LINKS.LINK, LINKS.UPDATED_AT, LINKS.UPDATE_INFO)
-                    .values(link, Timestamp.from(Instant.ofEpochMilli(System.currentTimeMillis())).toLocalDateTime(), null)
-                    .returning(LINKS.ID, LINKS.LINK, LINKS.UPDATED_AT, LINKS.UPDATE_INFO).fetch().map(linkFieldsMapper).get(0);
+                    .values(
+                        link,
+                        Timestamp.from(Instant.ofEpochMilli(System.currentTimeMillis())).toLocalDateTime(),
+                        null
+                    )
+                    .returning(LINKS.ID, LINKS.LINK, LINKS.UPDATED_AT, LINKS.UPDATE_INFO)
+                .fetch().map(linkFieldsMapper).get(0);
 
-            dslContext.insertInto(TRACKINGS).columns(TRACKINGS.LINK_ID, TRACKINGS.TG_CHAT_ID).values(newLink.id(), tgChatId).execute();
+            dslContext.insertInto(TRACKINGS).columns(TRACKINGS.LINK_ID, TRACKINGS.TG_CHAT_ID)
+                .values(newLink.id(), tgChatId).execute();
             return newLink;
         }
     }
@@ -95,12 +107,14 @@ public class JooqLinkRepository {
                     .set(LINKS.LINK, currentLink.link())
                     .set(LINKS.UPDATED_AT, currentLink.updatedAt().toLocalDateTime())
                     .set(LINKS.UPDATE_INFO, JSONB.valueOf(updateInfoJson))
-                    .returning(LINKS.ID, LINKS.LINK, LINKS.UPDATED_AT, LINKS.UPDATE_INFO).fetch().map(linkFieldsMapper).get(0);
+                    .returning(LINKS.ID, LINKS.LINK, LINKS.UPDATED_AT, LINKS.UPDATE_INFO)
+                .fetch().map(linkFieldsMapper).get(0);
         } else {
             return dslContext
                     .insertInto(LINKS).columns(LINKS.LINK, LINKS.UPDATED_AT, LINKS.UPDATE_INFO)
                     .values(link, updatedAt.toLocalDateTime(), JSONB.valueOf(updateInfoJson))
-                    .returning(LINKS.ID, LINKS.LINK, LINKS.UPDATED_AT, LINKS.UPDATE_INFO).fetch().map(linkFieldsMapper).get(0);
+                    .returning(LINKS.ID, LINKS.LINK, LINKS.UPDATED_AT, LINKS.UPDATE_INFO)
+                .fetch().map(linkFieldsMapper).get(0);
         }
     }
 

@@ -10,7 +10,6 @@ import ru.tinkoff.edu.java.scrapper.service.api.BotNotifier;
 import ru.tinkoff.edu.java.scrapper.service.impl.jpa.JpaChatService;
 import ru.tinkoff.edu.java.scrapper.service.impl.jpa.JpaLinkService;
 import ru.tinkoff.edu.java.scrapper.service.impl.jpa.JpaLinkUpdater;
-import ru.tinkoff.edu.java.scrapper.webclient.api.BotClient;
 import ru.tinkoff.edu.java.scrapper.webclient.api.GitHubClient;
 import ru.tinkoff.edu.java.scrapper.webclient.api.StackOverflowClient;
 

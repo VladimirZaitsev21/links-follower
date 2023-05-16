@@ -6,7 +6,6 @@ import ru.tinkoff.edu.java.bot.telegram.executor.api.MessageCommandExecutor;
 import ru.tinkoff.edu.java.bot.telegram.model.BotState;
 import ru.tinkoff.edu.java.bot.telegram.model.Command;
 import ru.tinkoff.edu.java.bot.telegram.util.LocaleMessageRepo;
-
 import static ru.tinkoff.edu.java.bot.telegram.model.BotState.INCORRECT;
 import static ru.tinkoff.edu.java.bot.telegram.model.BotState.MAIN_MENU;
 

@@ -17,7 +17,12 @@ public class ScrapperQueueProducer {
     private final MessageConverter messageConverter;
     private final MessageProperties messageProperties;
 
-    public ScrapperQueueProducer(RabbitTemplate rabbitTemplate, String rabbitExchange, String rabbitRoutingKey, MessageConverter messageConverter) {
+    public ScrapperQueueProducer(
+        RabbitTemplate rabbitTemplate,
+        String rabbitExchange,
+        String rabbitRoutingKey,
+        MessageConverter messageConverter
+    ) {
         this.rabbitTemplate = rabbitTemplate;
         this.rabbitExchange = rabbitExchange;
         this.rabbitRoutingKey = rabbitRoutingKey;

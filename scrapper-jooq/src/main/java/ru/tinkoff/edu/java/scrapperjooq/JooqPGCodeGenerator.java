@@ -1,7 +1,11 @@
 package ru.tinkoff.edu.java.scrapperjooq;
 
 import org.jooq.codegen.GenerationTool;
-import org.jooq.meta.jaxb.*;
+import org.jooq.meta.jaxb.Configuration;
+import org.jooq.meta.jaxb.Database;
+import org.jooq.meta.jaxb.Generator;
+import org.jooq.meta.jaxb.Jdbc;
+import org.jooq.meta.jaxb.Target;
 
 public class JooqPGCodeGenerator extends PostgreSqlEnvironment {
 

@@ -13,7 +13,6 @@ import ru.tinkoff.edu.java.bot.scrapperapi.model.AllLinksApiResponse;
 import ru.tinkoff.edu.java.bot.scrapperapi.model.LinkResponse;
 import ru.tinkoff.edu.java.bot.scrapperapi.model.RemoveLinkRequest;
 import ru.tinkoff.edu.java.common.model.ApiErrorResponse;
-
 import static org.springframework.http.HttpMethod.DELETE;
 
 public class HttpScrapperClient implements ScrapperClient {
@@ -24,6 +23,11 @@ public class HttpScrapperClient implements ScrapperClient {
     public static final String START_TG_CHAT_URL = "/tg-chat/{id}/{username}";
     public static final String TG_CHAT_URL = "/tg-chat/{id}";
     public static final String LINKS_URL = "/links";
+    public static final String WHEN_REGISTERING_NEW_CHAT = "registering new chat";
+    public static final String WHEN_DELETING_CHAT = "deleting chat";
+    public static final String WHEN_GETTING_TRACKING_LINKS = "getting tracking links";
+    public static final String WHEN_ADDING_LINK_TO_TRACK = "adding link to track";
+    public static final String WHEN_REMOVING_LINK_FROM_TRACKING = "removing link from tracking";
 
     private final String baseUrl;
     private final WebClient webClient;
@@ -45,11 +49,11 @@ public class HttpScrapperClient implements ScrapperClient {
                 .retrieve()
                 .onStatus(
                         HttpStatusCode::is4xxClientError,
-                        resp -> onClientErrorInternal(resp, "registering new chat")
+                        resp -> onClientErrorInternal(resp, WHEN_REGISTERING_NEW_CHAT)
                 )
                 .onStatus(
                         HttpStatusCode::is5xxServerError,
-                        resp -> onServerErrorInternal(resp, "registering new chat")
+                        resp -> onServerErrorInternal(resp, WHEN_REGISTERING_NEW_CHAT)
                 )
                 .bodyToMono(Void.class).block();
     }
@@ -61,11 +65,11 @@ public class HttpScrapperClient implements ScrapperClient {
                 .retrieve()
                 .onStatus(
                         HttpStatusCode::is4xxClientError,
-                        resp -> onClientErrorInternal(resp, "deleting chat")
+                        resp -> onClientErrorInternal(resp, WHEN_DELETING_CHAT)
                 )
                 .onStatus(
                         HttpStatusCode::is5xxServerError,
-                        resp -> onServerErrorInternal(resp, "deleting chat")
+                        resp -> onServerErrorInternal(resp, WHEN_DELETING_CHAT)
                 )
                 .bodyToMono(Void.class).block();
     }
@@ -79,11 +83,11 @@ public class HttpScrapperClient implements ScrapperClient {
                 .retrieve()
                 .onStatus(
                         HttpStatusCode::is4xxClientError,
-                        resp -> onClientErrorInternal(resp, "getting tracking links")
+                        resp -> onClientErrorInternal(resp, WHEN_GETTING_TRACKING_LINKS)
                 )
                 .onStatus(
                         HttpStatusCode::is5xxServerError,
-                        resp -> onServerErrorInternal(resp, "getting tracking links")
+                        resp -> onServerErrorInternal(resp, WHEN_GETTING_TRACKING_LINKS)
                 )
                 .bodyToMono(AllLinksApiResponse.class).block();
     }
@@ -98,11 +102,11 @@ public class HttpScrapperClient implements ScrapperClient {
                 .retrieve()
                 .onStatus(
                         HttpStatusCode::is4xxClientError,
-                        resp -> onClientErrorInternal(resp, "adding link to track")
+                        resp -> onClientErrorInternal(resp, WHEN_ADDING_LINK_TO_TRACK)
                 )
                 .onStatus(
                         HttpStatusCode::is5xxServerError,
-                        resp -> onServerErrorInternal(resp, "adding link to track")
+                        resp -> onServerErrorInternal(resp, WHEN_ADDING_LINK_TO_TRACK)
                 )
                 .bodyToMono(LinkResponse.class).block();
     }
@@ -117,11 +121,11 @@ public class HttpScrapperClient implements ScrapperClient {
                 .retrieve()
                 .onStatus(
                         HttpStatusCode::is4xxClientError,
-                        resp -> onClientErrorInternal(resp, "removing link from tracking")
+                        resp -> onClientErrorInternal(resp, WHEN_REMOVING_LINK_FROM_TRACKING)
                 )
                 .onStatus(
                         HttpStatusCode::is5xxServerError,
-                        resp -> onServerErrorInternal(resp, "removing link from tracking")
+                        resp -> onServerErrorInternal(resp, WHEN_REMOVING_LINK_FROM_TRACKING)
                 )
                 .bodyToMono(LinkResponse.class).block();
     }

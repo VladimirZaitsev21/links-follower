@@ -26,7 +26,11 @@ public class JdbcAccessConfiguration {
 
     @Bean
     @Profile("!test")
-    public JdbcChatRepository jdbcChatRepository(JdbcTemplate jdbcTemplate, ChatMapper chatMapper, QueriesSource queriesSource) {
+    public JdbcChatRepository jdbcChatRepository(
+        JdbcTemplate jdbcTemplate,
+        ChatMapper chatMapper,
+        QueriesSource queriesSource
+    ) {
         return new JdbcChatRepository(jdbcTemplate, chatMapper, queriesSource);
     }
 

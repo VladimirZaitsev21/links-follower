@@ -4,7 +4,11 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.validation.annotation.Validated;
-import ru.tinkoff.edu.java.scrapper.configuration.dto.*;
+import ru.tinkoff.edu.java.scrapper.configuration.dto.AccessType;
+import ru.tinkoff.edu.java.scrapper.configuration.dto.Db;
+import ru.tinkoff.edu.java.scrapper.configuration.dto.Expiration;
+import ru.tinkoff.edu.java.scrapper.configuration.dto.Rabbit;
+import ru.tinkoff.edu.java.scrapper.configuration.dto.Scheduler;
 
 @Validated
 @EnableScheduling

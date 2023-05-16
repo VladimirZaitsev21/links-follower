@@ -1,15 +1,14 @@
 package ru.tinkoff.edu.java.scrapper.service.impl.jooq;
 
+import java.net.URI;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.domain.jooq.repository.JooqLinkRepository;
 import ru.tinkoff.edu.java.scrapper.domain.model.TableLink;
 import ru.tinkoff.edu.java.scrapper.service.api.LinkService;
 import ru.tinkoff.edu.java.scrapper.service.model.Link;
-
-import java.net.URI;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.util.List;
 
 @Transactional
 public class JooqLinkService implements LinkService {

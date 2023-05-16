@@ -1,12 +1,11 @@
 package ru.tinkoff.edu.java.scrapper.domain.util;
 
-import org.springframework.stereotype.Component;
-import ru.tinkoff.edu.java.scrapper.domain.model.TableLink;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.stereotype.Component;
+import ru.tinkoff.edu.java.scrapper.domain.model.TableLink;
 
 @Component
 public class MappingUtils {

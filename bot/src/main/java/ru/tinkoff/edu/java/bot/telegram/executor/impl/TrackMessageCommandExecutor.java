@@ -6,9 +6,8 @@ import ru.tinkoff.edu.java.bot.telegram.executor.api.MessageCommandExecutor;
 import ru.tinkoff.edu.java.bot.telegram.model.BotState;
 import ru.tinkoff.edu.java.bot.telegram.model.Command;
 import ru.tinkoff.edu.java.bot.telegram.util.LocaleMessageRepo;
-
-import static ru.tinkoff.edu.java.bot.telegram.model.BotState.TRACK;
 import static ru.tinkoff.edu.java.bot.telegram.model.BotState.NEW_LINK;
+import static ru.tinkoff.edu.java.bot.telegram.model.BotState.TRACK;
 
 @Component
 public class TrackMessageCommandExecutor implements MessageCommandExecutor {

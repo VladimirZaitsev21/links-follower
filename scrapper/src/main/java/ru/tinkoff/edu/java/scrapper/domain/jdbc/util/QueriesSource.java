@@ -1,9 +1,8 @@
 package ru.tinkoff.edu.java.scrapper.domain.jdbc.util;
 
+import java.util.Locale;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
-
-import java.util.Locale;
 
 @Component
 public class QueriesSource {

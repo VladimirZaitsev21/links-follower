@@ -9,7 +9,6 @@ import ru.tinkoff.edu.java.bot.telegram.executor.api.MessageCommandExecutor;
 import ru.tinkoff.edu.java.bot.telegram.model.BotState;
 import ru.tinkoff.edu.java.bot.telegram.model.Command;
 import ru.tinkoff.edu.java.bot.telegram.util.LocaleMessageRepo;
-
 import static ru.tinkoff.edu.java.bot.telegram.model.BotState.MAIN_MENU;
 import static ru.tinkoff.edu.java.bot.telegram.model.BotState.START;
 
@@ -24,7 +23,11 @@ public class StartMessageCommandExecutor implements MessageCommandExecutor {
     private final ScrapperClient scrapperClient;
     private final LocaleMessageRepo messageRepo;
 
-    public StartMessageCommandExecutor(DialogsStateCache dialogsStateCache, ScrapperClient scrapperClient, LocaleMessageRepo messageRepo) {
+    public StartMessageCommandExecutor(
+        DialogsStateCache dialogsStateCache,
+        ScrapperClient scrapperClient,
+        LocaleMessageRepo messageRepo
+    ) {
         this.dialogsStateCache = dialogsStateCache;
         this.scrapperClient = scrapperClient;
         this.messageRepo = messageRepo;

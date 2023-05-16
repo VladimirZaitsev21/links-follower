@@ -1,6 +1,11 @@
 package ru.tinkoff.edu.java.scrapper.configuration;
 
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -29,6 +34,7 @@ public class RabbitMQConfiguration {
         connectionFactory.setVirtualHost(rabbitVirtualHost);
         return connectionFactory;
     }
+
     @Bean
     public Queue queue(String rabbitQueue, String rabbitRoutingKey, String rabbitExchange) {
         return QueueBuilder.durable(rabbitQueue)
@@ -56,6 +62,7 @@ public class RabbitMQConfiguration {
     public AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory) {
         return new RabbitAdmin(connectionFactory);
     }
+
     @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter("*");
