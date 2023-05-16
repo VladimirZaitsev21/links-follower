@@ -1,5 +1,7 @@
 package ru.tinkoff.edu.java.bot.telegram;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Metrics;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,19 +24,23 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final List<BotCommand> botCommands;
     private final TelegramUpdateHandler<SendMessage> updateHandler;
     private final LinkUpdateHandler linkUpdateHandler;
+    private final Counter processedMessagesCounter;
 
     public TelegramBot(
             String botUsername,
             String botToken,
             List<BotCommand> botCommands,
             TelegramUpdateHandler<SendMessage> updateHandler,
-            LinkUpdateHandler linkUpdateHandler
+            LinkUpdateHandler linkUpdateHandler,
+            String applicationName
     ) {
         super(botToken);
         this.botUsername = botUsername;
         this.botCommands = botCommands;
         this.updateHandler = updateHandler;
         this.linkUpdateHandler = linkUpdateHandler;
+        this.processedMessagesCounter = Metrics
+            .counter("processed_messages_count", "application", applicationName);
     }
 
     public void initBot() throws TelegramApiException {
@@ -45,6 +51,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         try {
             execute(updateHandler.handle(update));
+            processedMessagesCounter.increment();
         } catch (TelegramApiException e) {
             LOGGER.error("Couldn't process the update [{}].", update);
         }

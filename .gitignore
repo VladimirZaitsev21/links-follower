@@ -11,3 +11,6 @@
 /scrapper-jooq/scrapper-jooq.iml
 /bot/bot.iml
 /link-parser/link-parser.iml
+/common/common.iml
+/prometheus/
+/grafana/

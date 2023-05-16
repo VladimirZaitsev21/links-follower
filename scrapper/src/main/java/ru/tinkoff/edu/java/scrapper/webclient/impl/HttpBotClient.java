@@ -9,7 +9,7 @@ import ru.tinkoff.edu.java.scrapper.webclient.api.BotClient;
 
 public class HttpBotClient implements BotClient {
 
-    private static final String BASE_URL = "https://localhost:9090/updates";
+    private static final String BASE_URL = "https://localhost:9000/updates";
 
     private final String baseUrl;
     private final WebClient webClient;
